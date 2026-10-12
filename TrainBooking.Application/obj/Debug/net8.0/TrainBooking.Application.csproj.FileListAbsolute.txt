@@ -1,0 +1,16 @@
+D:\0 CS\project_ticket\TrainBooking.Application\bin\Debug\net8.0\TrainBooking.Application.deps.json
+D:\0 CS\project_ticket\TrainBooking.Application\bin\Debug\net8.0\TrainBooking.Application.dll
+D:\0 CS\project_ticket\TrainBooking.Application\bin\Debug\net8.0\TrainBooking.Application.pdb
+D:\0 CS\project_ticket\TrainBooking.Application\bin\Debug\net8.0\TrainBooking.Domain.dll
+D:\0 CS\project_ticket\TrainBooking.Application\bin\Debug\net8.0\TrainBooking.Domain.pdb
+D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\TrainBooking.Application.csproj.AssemblyReference.cache
+D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\TrainBooking.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\TrainBooking.Application.AssemblyInfoInputs.cache
+D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\TrainBooking.Application.AssemblyInfo.cs
+D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\TrainBooking.Application.csproj.CoreCompileInputs.cache
+D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\TrainBooking.Application.sourcelink.json
+D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\TrainBoo.D600D9E1.Up2Date
+D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\TrainBooking.Application.dll
+D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\refint\TrainBooking.Application.dll
+D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\TrainBooking.Application.pdb
+D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\ref\TrainBooking.Application.dll

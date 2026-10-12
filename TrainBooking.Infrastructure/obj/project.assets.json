@@ -1,11 +1,48 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "TrainBooking.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "TrainBooking.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/TrainBooking.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TrainBooking.Application.dll": {}
+        }
+      },
+      "TrainBooking.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/TrainBooking.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TrainBooking.Domain.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "TrainBooking.Application/1.0.0": {
+      "type": "project",
+      "path": "../TrainBooking.Application/TrainBooking.Application.csproj",
+      "msbuildProject": "../TrainBooking.Application/TrainBooking.Application.csproj"
+    },
+    "TrainBooking.Domain/1.0.0": {
+      "type": "project",
+      "path": "../TrainBooking.Domain/TrainBooking.Domain.csproj",
+      "msbuildProject": "../TrainBooking.Domain/TrainBooking.Domain.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "TrainBooking.Application >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Lecoo\\.nuget\\packages\\": {}
@@ -31,7 +68,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\0 CS\\project_ticket\\TrainBooking.Application\\TrainBooking.Application.csproj": {
+              "projectPath": "D:\\0 CS\\project_ticket\\TrainBooking.Application\\TrainBooking.Application.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
