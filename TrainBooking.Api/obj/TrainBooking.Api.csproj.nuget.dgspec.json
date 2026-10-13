@@ -54,6 +54,14 @@
               "target": "Package",
               "version": "[8.0.27, )"
             },
+            "Microsoft.Extensions.Resilience": {
+              "target": "Package",
+              "version": "[10.10.0, )"
+            },
+            "Polly": {
+              "target": "Package",
+              "version": "[8.8.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.6.2, )"
