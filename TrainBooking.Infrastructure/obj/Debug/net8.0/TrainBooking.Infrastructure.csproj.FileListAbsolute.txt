@@ -16,3 +16,5 @@ D:\0 CS\project_ticket\TrainBooking.Infrastructure\obj\Debug\net8.0\TrainBooking
 D:\0 CS\project_ticket\TrainBooking.Infrastructure\obj\Debug\net8.0\refint\TrainBooking.Infrastructure.dll
 D:\0 CS\project_ticket\TrainBooking.Infrastructure\obj\Debug\net8.0\TrainBooking.Infrastructure.pdb
 D:\0 CS\project_ticket\TrainBooking.Infrastructure\obj\Debug\net8.0\ref\TrainBooking.Infrastructure.dll
+D:\0 CS\project_ticket\TrainBooking.Infrastructure\bin\Debug\net8.0\TrainBooking.Infrastructure.runtimeconfig.json
+D:\0 CS\project_ticket\TrainBooking.Infrastructure\obj\Debug\net8.0\TrainBooking.Infrastructure.genruntimeconfig.cache

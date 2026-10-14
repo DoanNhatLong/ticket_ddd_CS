@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TrainBooking.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3fc851310e232ceffb22821001154103f78834c3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f618f21a94bc02deee4ad223918d104a44fffa2f")]
 [assembly: System.Reflection.AssemblyProductAttribute("TrainBooking.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TrainBooking.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
