@@ -1,24 +1,16 @@
-version: '3.8'
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["TrainBooking.sln", "./"]
+COPY ["TrainBooking.Api/TrainBooking.Api.csproj", "TrainBooking.Api/"]
+COPY ["TrainBooking.Application/TrainBooking.Application.csproj", "TestBooking.Application/"]
+COPY ["TrainBooking.Domain/TrainBooking.Domain.csproj", "TrainBooking.Domain/"]
+COPY ["TrainBooking.Infrastructure/TrainBooking.Infrastructure.csproj", "TrainBooking.Infrastructure/"]
+RUN dotnet restore "TrainBooking.Api/TrainBooking.Api.csproj"
+COPY . .
+WORKDIR "/src/TrainBooking.Api"
+RUN dotnet publish -c Release -o /app/publish
 
-services:
-  mysql-db:
-    image: mysql:8.0
-    container_name: train_mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ad1412
-      MYSQL_DATABASE: 0test1
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-
-  redis-cache:
-    image: redis:alpine
-    container_name: train_redis
-    restart: always
-    ports:
-      - "6379:6379"
-
-volumes:
-  mysql_data:
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "TrainBooking.Api.dll"]
