@@ -1,11 +1,18 @@
 using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
 using TrainBooking.Application.Interfaces;
+using TrainBooking.Infrastructure.Entity;
 using TrainBooking.Infrastructure.Repositories.UserRepository;
 using Polly;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IUserRepository, TrainBooking.Infrastructure.Repositories.UserRepository.UserRepository>();
+// Đăng ký AppDbContext sử dụng kết nối MySQL
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddFastEndpoints();
 
