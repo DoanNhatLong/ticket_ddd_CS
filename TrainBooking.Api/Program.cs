@@ -1,7 +1,13 @@
+using FastEndpoints;
+using TrainBooking.Application.Interfaces;
+using TrainBooking.Infrastructure.Repositories.UserRepository;
 using Polly;
-using Polly.Timeout;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IUserRepository, TrainBooking.Infrastructure.Repositories.UserRepository.UserRepository>();
+
+builder.Services.AddFastEndpoints();
 
 builder.Services.AddResiliencePipeline("BookingPipeline", pipelineBuilder =>
 {
@@ -23,6 +29,8 @@ builder.Services.AddResiliencePipeline("BookingPipeline", pipelineBuilder =>
 });
 
 var app = builder.Build();
+
+app.UseFastEndpoints();
 
 app.MapGet("/", () => "Hi");
 
