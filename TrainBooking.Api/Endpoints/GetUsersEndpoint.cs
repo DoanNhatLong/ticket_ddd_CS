@@ -1,16 +1,16 @@
 using FastEndpoints;
-using TrainBooking.Application.Dtos;
-using TrainBooking.Application.Interfaces;
+using MediatR;
+using TrainBooking.Application.Users.Queries.GetUsersSummary;
 
 namespace TrainBooking.Api.Endpoints;
 
-public class GetUsersEndpoint : EndpointWithoutRequest<IEnumerable<UserSummaryResponse>>
+public class GetUsersEndpoint : EndpointWithoutRequest<IReadOnlyList<UserSummaryResponse>>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly ISender _sender;
 
-    public GetUsersEndpoint(IUserRepository userRepository)
+    public GetUsersEndpoint(ISender sender)
     {
-        _userRepository = userRepository;
+        _sender = sender;
     }
 
     public override void Configure()
@@ -21,7 +21,7 @@ public class GetUsersEndpoint : EndpointWithoutRequest<IEnumerable<UserSummaryRe
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var users = await _userRepository.GetUsersSummaryAsync();
-        await SendAsync(users, cancellation: ct);
+        var users = await _sender.Send(new GetUsersSummaryQuery(), ct);
+        await SendOkAsync(users, ct);
     }
 }

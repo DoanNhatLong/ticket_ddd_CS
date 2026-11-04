@@ -6,8 +6,8 @@ services:
     container_name: train_mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ad1412
-      MYSQL_DATABASE: 0test1
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is not set, copy .env.example to .env}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-0test1}
     ports:
       - "3306:3306"
     volumes:
@@ -18,8 +18,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=${GF_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_ADMIN_PASSWORD:?GF_ADMIN_PASSWORD is not set, copy .env.example to .env}
     volumes:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
       - grafana_data:/var/lib/grafana

@@ -1,34 +1,15 @@
 using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
-using TrainBooking.Application.Bookings.Queries.GetAllBookings;
-using TrainBooking.Application.Interfaces;
-using TrainBooking.Domain.Bookings;
-using TrainBooking.Infrastructure.Repositories.BookingRepository;
-using TrainBooking.Infrastructure.Entity;
-using TrainBooking.Infrastructure.Repositories.UserRepository;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using Polly;
+using TrainBooking.Application;
+using TrainBooking.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Đăng ký AppDbContext sử dụng kết nối MySQL
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IBookingRepository, BookingRepository>();
-
-builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssembly(typeof(GetAllBookingsQuery).Assembly));
-
-// Redis distributed cache: inject IDistributedCache wherever caching is needed
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
-    options.InstanceName = "TrainBooking:";
-});
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
 
 builder.Services.AddFastEndpoints();
 

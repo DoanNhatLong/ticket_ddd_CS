@@ -1,0 +1,15 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+**/.idea/
+**/*.user
+.git/
+.gitignore
+.dockerignore
+.env
+Dockerfile
+docker-compose*.yml
+monitoring/
+init.sql
+CLAUDE.md

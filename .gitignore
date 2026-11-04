@@ -1,0 +1,31 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Pp]ublish/
+*.user
+*.suo
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+
+# Test results / coverage
+[Tt]est[Rr]esults/
+coverage/
+*.coverage
+
+# NuGet
+*.nupkg
+packages/
+
+# Local secrets / environment
+.env
+appsettings.*.local.json
+
+# OS
+Thumbs.db
+.DS_Store

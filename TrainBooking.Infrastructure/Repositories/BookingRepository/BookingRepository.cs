@@ -10,7 +10,7 @@ namespace TrainBooking.Infrastructure.Repositories.BookingRepository;
 /// EF Core implementation of <see cref="IBookingRepository"/>.
 /// Reads the scaffolded persistence model and maps it to the domain aggregate.
 /// </summary>
-public sealed class BookingRepository : IBookingRepository
+internal sealed class BookingRepository : IBookingRepository
 {
     private readonly AppDbContext _context;
 
