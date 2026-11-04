@@ -20,6 +20,18 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
-    restart: always    
+    restart: always
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    container_name: train_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: always
 volumes:
   mysql_data:
+  prometheus_data:

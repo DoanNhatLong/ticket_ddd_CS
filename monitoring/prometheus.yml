@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # TrainBooking.Api runs on the host machine (dotnet run), not inside Docker,
+  # so it is reached through host.docker.internal.
+  - job_name: "trainbooking-api"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["host.docker.internal:7777"]
