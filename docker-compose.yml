@@ -37,7 +37,22 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     restart: always
+  redis:
+    image: redis:7.4-alpine
+    container_name: train_redis
+    # Host port 6380 because 6379 is already used by a native Redis on the dev machine.
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: always
 volumes:
   mysql_data:
   prometheus_data:
   grafana_data:
+  redis_data:

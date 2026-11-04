@@ -23,6 +23,13 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(GetAllBookingsQuery).Assembly));
 
+// Redis distributed cache: inject IDistributedCache wherever caching is needed
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "TrainBooking:";
+});
+
 builder.Services.AddFastEndpoints();
 
 // OpenTelemetry metrics exposed in Prometheus format at /metrics
