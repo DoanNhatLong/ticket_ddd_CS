@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TrainBooking.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93890656d87f1bac0699ad45eb69b994cd58cfff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4097897b2b2f196af15bf85cc55de725050ca48b")]
 [assembly: System.Reflection.AssemblyProductAttribute("TrainBooking.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TrainBooking.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

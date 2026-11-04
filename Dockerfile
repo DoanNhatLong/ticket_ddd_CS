@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["TrainBooking.sln", "./"]
 COPY ["TrainBooking.Api/TrainBooking.Api.csproj", "TrainBooking.Api/"]
-COPY ["TrainBooking.Application/TrainBooking.Application.csproj", "TestBooking.Application/"]
+COPY ["TrainBooking.Application/TrainBooking.Application.csproj", "TrainBooking.Application/"]
 COPY ["TrainBooking.Domain/TrainBooking.Domain.csproj", "TrainBooking.Domain/"]
 COPY ["TrainBooking.Infrastructure/TrainBooking.Infrastructure.csproj", "TrainBooking.Infrastructure/"]
 RUN dotnet restore "TrainBooking.Api/TrainBooking.Api.csproj"

@@ -54,10 +54,6 @@ D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Microsoft.Extensions.Ob
 D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Microsoft.Extensions.Resilience.dll
 D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Microsoft.Extensions.Telemetry.Abstractions.dll
-D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
-D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
-D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
-D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\MySqlConnector.dll
 D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Pipelines.Sockets.Unofficial.dll
 D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Polly.dll
@@ -66,7 +62,6 @@ D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Polly.Extensions.dll
 D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Polly.RateLimiting.dll
 D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\Pomelo.EntityFrameworkCore.MySql.dll
 D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\StackExchange.Redis.dll
-D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
 D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\FastEndpoints.dll
 D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\FastEndpoints.Attributes.dll
 D:\0 CS\project_ticket\TrainBooking.Api\bin\Debug\net8.0\FastEndpoints.Messaging.Core.dll

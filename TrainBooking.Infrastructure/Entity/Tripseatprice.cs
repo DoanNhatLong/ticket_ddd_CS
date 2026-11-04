@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TrainBooking.Infrastructure.Entity;
 
-[Table("tripseatprices")]
+[Table("TripSeatPrices")]
 [Index("TrainTripId", Name = "FK_TripSeatPrices_TrainTrip")]
 public partial class Tripseatprice
 {

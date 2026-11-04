@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TrainBooking.Infrastructure.Entity;
 
-[Table("bookings")]
+[Table("Bookings")]
 [Index("BookingCode", Name = "BookingCode", IsUnique = true)]
 [Index("UserId", Name = "FK_Bookings_User")]
 public partial class Booking
