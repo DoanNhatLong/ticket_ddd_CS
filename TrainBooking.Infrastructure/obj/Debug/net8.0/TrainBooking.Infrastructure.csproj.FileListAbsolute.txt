@@ -18,3 +18,7 @@ D:\0 CS\project_ticket\TrainBooking.Infrastructure\obj\Debug\net8.0\TrainBooking
 D:\0 CS\project_ticket\TrainBooking.Infrastructure\obj\Debug\net8.0\ref\TrainBooking.Infrastructure.dll
 D:\0 CS\project_ticket\TrainBooking.Infrastructure\bin\Debug\net8.0\TrainBooking.Infrastructure.runtimeconfig.json
 D:\0 CS\project_ticket\TrainBooking.Infrastructure\obj\Debug\net8.0\TrainBooking.Infrastructure.genruntimeconfig.cache
+C:\Users\Lecoo\AppData\Local\Temp\claude\57229d4e3ff99e24\7f97fcf4-565c-4a6a-9c2b-20c002236fcc\scratchpad\apiout\TrainBooking.Infrastructure.deps.json
+C:\Users\Lecoo\AppData\Local\Temp\claude\57229d4e3ff99e24\7f97fcf4-565c-4a6a-9c2b-20c002236fcc\scratchpad\apiout\TrainBooking.Infrastructure.runtimeconfig.json
+C:\Users\Lecoo\AppData\Local\Temp\claude\57229d4e3ff99e24\7f97fcf4-565c-4a6a-9c2b-20c002236fcc\scratchpad\apiout\TrainBooking.Infrastructure.dll
+C:\Users\Lecoo\AppData\Local\Temp\claude\57229d4e3ff99e24\7f97fcf4-565c-4a6a-9c2b-20c002236fcc\scratchpad\apiout\TrainBooking.Infrastructure.pdb

@@ -14,3 +14,6 @@ D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\TrainBooking.Ap
 D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\refint\TrainBooking.Application.dll
 D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\TrainBooking.Application.pdb
 D:\0 CS\project_ticket\TrainBooking.Application\obj\Debug\net8.0\ref\TrainBooking.Application.dll
+C:\Users\Lecoo\AppData\Local\Temp\claude\57229d4e3ff99e24\7f97fcf4-565c-4a6a-9c2b-20c002236fcc\scratchpad\apiout\TrainBooking.Application.deps.json
+C:\Users\Lecoo\AppData\Local\Temp\claude\57229d4e3ff99e24\7f97fcf4-565c-4a6a-9c2b-20c002236fcc\scratchpad\apiout\TrainBooking.Application.dll
+C:\Users\Lecoo\AppData\Local\Temp\claude\57229d4e3ff99e24\7f97fcf4-565c-4a6a-9c2b-20c002236fcc\scratchpad\apiout\TrainBooking.Application.pdb

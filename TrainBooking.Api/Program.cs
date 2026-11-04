@@ -6,6 +6,8 @@ using TrainBooking.Domain.Bookings;
 using TrainBooking.Infrastructure.Repositories.BookingRepository;
 using TrainBooking.Infrastructure.Entity;
 using TrainBooking.Infrastructure.Repositories.UserRepository;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 using Polly;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +24,15 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(GetAllBookingsQuery).Assembly));
 
 builder.Services.AddFastEndpoints();
+
+// OpenTelemetry metrics exposed in Prometheus format at /metrics
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService("TrainBooking.Api"))
+    .WithMetrics(metrics => metrics
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddRuntimeInstrumentation()
+        .AddPrometheusExporter());
 
 builder.Services.AddResiliencePipeline("BookingPipeline", pipelineBuilder =>
 {
@@ -45,6 +56,8 @@ builder.Services.AddResiliencePipeline("BookingPipeline", pipelineBuilder =>
 var app = builder.Build();
 
 app.UseFastEndpoints();
+
+app.MapPrometheusScrapingEndpoint();
 
 app.MapGet("/", () => "Hi");
 
