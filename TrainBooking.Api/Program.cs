@@ -1,6 +1,9 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using TrainBooking.Application.Bookings.Queries.GetAllBookings;
 using TrainBooking.Application.Interfaces;
+using TrainBooking.Domain.Bookings;
+using TrainBooking.Infrastructure.Repositories.BookingRepository;
 using TrainBooking.Infrastructure.Entity;
 using TrainBooking.Infrastructure.Repositories.UserRepository;
 using Polly;
@@ -13,6 +16,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(GetAllBookingsQuery).Assembly));
 
 builder.Services.AddFastEndpoints();
 

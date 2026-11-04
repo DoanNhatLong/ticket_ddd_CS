@@ -705,6 +705,7 @@
       },
       "TrainBooking.Application/1.0.0": {
         "dependencies": {
+          "MediatR": "12.4.1",
           "TrainBooking.Domain": "1.0.0"
         },
         "runtime": {
