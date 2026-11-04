@@ -34,8 +34,19 @@ public static class DependencyInjection
                 "For local development set it with 'dotnet user-secrets'.");
         }
 
+        // Explicit server version instead of ServerVersion.AutoDetect: AutoDetect opens a DB
+        // connection every time DbContext options are built (once per scope/request).
+        var serverVersionText = configuration["Database:ServerVersion"];
+        if (string.IsNullOrWhiteSpace(serverVersionText))
+        {
+            throw new InvalidOperationException(
+                "'Database:ServerVersion' is not configured (e.g. \"8.0.46-mysql\").");
+        }
+
+        var serverVersion = ServerVersion.Parse(serverVersionText);
+
         services.AddDbContext<AppDbContext>(options =>
-            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            options.UseMySql(connectionString, serverVersion));
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IBookingRepository, BookingRepository>();
