@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -42,5 +42,5 @@ public partial class Traintrip
     public virtual Train Train { get; set; } = null!;
 
     [InverseProperty("TrainTrip")]
-    public virtual ICollection<Tripseatprice> Tripseatprices { get; set; } = new List<Tripseatprice>();
+    public virtual ICollection<Fare> Fares { get; set; } = new List<Fare>();
 }

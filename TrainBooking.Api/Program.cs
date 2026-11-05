@@ -2,6 +2,7 @@ using FastEndpoints;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using Polly;
+using TrainBooking.Api.Http;
 using TrainBooking.Application;
 using TrainBooking.Infrastructure;
 
@@ -12,6 +13,10 @@ builder.Services
     .AddInfrastructure(builder.Configuration);
 
 builder.Services.AddFastEndpoints();
+
+// Unhandled exceptions become a 500 problem response instead of an empty body.
+builder.Services.AddExceptionHandler<UnhandledExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 // OpenTelemetry metrics exposed in Prometheus format at /metrics
 builder.Services.AddOpenTelemetry()
@@ -43,6 +48,8 @@ builder.Services.AddResiliencePipeline("BookingPipeline", pipelineBuilder =>
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
+
 app.UseFastEndpoints();
 
 app.MapPrometheusScrapingEndpoint();
@@ -50,3 +57,6 @@ app.MapPrometheusScrapingEndpoint();
 app.MapGet("/", () => "Hi");
 
 app.Run();
+
+// Exposes the entry point to WebApplicationFactory in the integration tests.
+public partial class Program;

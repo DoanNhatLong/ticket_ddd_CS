@@ -2,9 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TrainBooking.Domain.Bookings;
+using TrainBooking.Domain.TrainTrips;
+using TrainBooking.Domain.Trains;
 using TrainBooking.Domain.Users;
 using TrainBooking.Infrastructure.Entity;
 using TrainBooking.Infrastructure.Repositories.BookingRepository;
+using TrainBooking.Infrastructure.Repositories.SeatRepository;
+using TrainBooking.Infrastructure.Repositories.TrainTripRepository;
 using TrainBooking.Infrastructure.Repositories.UserRepository;
 
 namespace TrainBooking.Infrastructure;
@@ -50,6 +54,8 @@ public static class DependencyInjection
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IBookingRepository, BookingRepository>();
+        services.AddScoped<ITrainTripRepository, TrainTripRepository>();
+        services.AddScoped<ISeatRepository, SeatRepository>();
     }
 
     private static void AddCaching(IServiceCollection services, IConfiguration configuration)

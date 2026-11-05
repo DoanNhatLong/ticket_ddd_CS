@@ -31,6 +31,26 @@ internal sealed class BookingRepository : IBookingRepository
         return records.Select(ToDomain).ToList();
     }
 
+    public async Task<IReadOnlySet<int>> GetTakenSeatIdsAsync(
+        int trainTripId,
+        DateTime nowUtc,
+        CancellationToken cancellationToken = default)
+    {
+        var paid = new[] { nameof(BookingStatus.Confirmed), nameof(BookingStatus.Completed) };
+        var pending = nameof(BookingStatus.Pending);
+
+        var seatIds = await _context.Bookingitems
+            .AsNoTracking()
+            .Where(item => item.TrainTripId == trainTripId)
+            .Where(item => paid.Contains(item.Booking.Status)
+                || (item.Booking.Status == pending && item.Booking.ExpiresAt > nowUtc))
+            .Select(item => item.SeatId)
+            .Distinct()
+            .ToListAsync(cancellationToken);
+
+        return seatIds.ToHashSet();
+    }
+
     private static DomainBooking ToDomain(BookingRecord record)
     {
         return DomainBooking.Rehydrate(

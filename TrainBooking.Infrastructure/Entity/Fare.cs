@@ -1,27 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace TrainBooking.Infrastructure.Entity;
 
-[Table("TripSeatPrices")]
-[Index("TrainTripId", Name = "FK_TripSeatPrices_TrainTrip")]
-public partial class Tripseatprice
+[Table("Fares")]
+[Index("TrainTripId", "SeatClassId", Name = "UQ_Fares_TrainTrip_SeatClass", IsUnique = true)]
+[Index("SeatClassId", Name = "FK_Fares_SeatClass")]
+public partial class Fare
 {
     [Key]
     public int Id { get; set; }
 
     public int TrainTripId { get; set; }
 
-    [StringLength(50)]
-    public string SeatTypeId { get; set; } = null!;
+    public int SeatClassId { get; set; }
 
     [Precision(10, 2)]
     public decimal Price { get; set; }
 
     [ForeignKey("TrainTripId")]
-    [InverseProperty("Tripseatprices")]
+    [InverseProperty("Fares")]
     public virtual Traintrip TrainTrip { get; set; } = null!;
+
+    [ForeignKey("SeatClassId")]
+    [InverseProperty("Fares")]
+    public virtual SeatClass SeatClass { get; set; } = null!;
 }

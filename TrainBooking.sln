@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainBooking.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainBooking.Api", "TrainBooking.Api\TrainBooking.Api.csproj", "{C41427A7-37D3-40B8-9DD9-1E5B85A34322}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainBooking.Api.Tests", "TrainBooking.Api.Tests\TrainBooking.Api.Tests.csproj", "{0C60B39A-CB21-455A-B5DF-9E432FD0553F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{C41427A7-37D3-40B8-9DD9-1E5B85A34322}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C41427A7-37D3-40B8-9DD9-1E5B85A34322}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C41427A7-37D3-40B8-9DD9-1E5B85A34322}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C60B39A-CB21-455A-B5DF-9E432FD0553F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C60B39A-CB21-455A-B5DF-9E432FD0553F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C60B39A-CB21-455A-B5DF-9E432FD0553F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C60B39A-CB21-455A-B5DF-9E432FD0553F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,6 +8,7 @@ namespace TrainBooking.Infrastructure.Entity;
 
 [Table("Seats")]
 [Index("CarriageId", Name = "FK_Seats_Carriage")]
+[Index("SeatClassId", Name = "FK_Seats_SeatClass")]
 public partial class Seat
 {
     [Key]
@@ -18,8 +19,7 @@ public partial class Seat
     [StringLength(10)]
     public string SeatNumber { get; set; } = null!;
 
-    [StringLength(50)]
-    public string SeatType { get; set; } = null!;
+    public int SeatClassId { get; set; }
 
     [InverseProperty("Seat")]
     public virtual ICollection<Bookingitem> Bookingitems { get; set; } = new List<Bookingitem>();
@@ -27,4 +27,8 @@ public partial class Seat
     [ForeignKey("CarriageId")]
     [InverseProperty("Seats")]
     public virtual Carriage Carriage { get; set; } = null!;
+
+    [ForeignKey("SeatClassId")]
+    [InverseProperty("Seats")]
+    public virtual SeatClass SeatClass { get; set; } = null!;
 }

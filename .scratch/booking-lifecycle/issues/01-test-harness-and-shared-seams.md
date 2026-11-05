@@ -4,12 +4,12 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] A new xUnit test project starts the API through `WebApplicationFactory` and talks to it over HTTP.
-- [ ] Tests run against a separate MySQL test database (never the dev/real one), created from `init.sql` and reset to seed data between tests.
-- [ ] Application code reads the current time only through an injected `TimeProvider`; tests replace it with a fake clock.
-- [ ] The customer is identified by a request header carrying the user id; a missing or unknown id is rejected.
-- [ ] Rule violations returned as Results map to 400 / 404 / 409 with a readable error body; unexpected errors no longer return an empty 500.
-- [ ] A test for the existing `GET /api/bookings` passes against the test database.
-- [ ] `dotnet build` and `dotnet test` pass.
+- [x] A new xUnit test project starts the API through `WebApplicationFactory` and talks to it over HTTP.
+- [x] Tests run against a separate MySQL test database (never the dev/real one), created from `init.sql` and reset to seed data between tests.
+- [x] Application code reads the current time only through an injected `TimeProvider`; tests replace it with a fake clock.
+- [x] The customer is identified by a request header carrying the user id; a missing or unknown id is rejected.
+- [x] Rule violations returned as Results map to 400 / 404 / 409 with a readable error body; unexpected errors no longer return an empty 500.
+- [x] A test for the existing `GET /api/bookings` passes against the test database.
+- [x] `dotnet build` and `dotnet test` pass.

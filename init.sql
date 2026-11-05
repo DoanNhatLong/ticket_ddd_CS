@@ -6,8 +6,10 @@ DROP TABLE IF EXISTS Payments;
 DROP TABLE IF EXISTS BookingItems;
 DROP TABLE IF EXISTS Bookings;
 DROP TABLE IF EXISTS Users;
-DROP TABLE IF EXISTS TripSeatPrices;
+DROP TABLE IF EXISTS TripSeatPrices; -- legacy name of Fares
+DROP TABLE IF EXISTS Fares;
 DROP TABLE IF EXISTS Seats;
+DROP TABLE IF EXISTS SeatClasses;
 DROP TABLE IF EXISTS Carriages;
 DROP TABLE IF EXISTS TrainTrips;
 DROP TABLE IF EXISTS Trains;
@@ -49,12 +51,20 @@ CREATE TABLE Carriages (
     CONSTRAINT FK_Carriages_Train FOREIGN KEY (TrainId) REFERENCES Trains(Id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- Seat class: the kind of place a seat offers; the only thing that sets a seat's price.
+CREATE TABLE SeatClasses (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Code VARCHAR(30) NOT NULL UNIQUE,
+    Name VARCHAR(100) NOT NULL
+) ENGINE=InnoDB;
+
 CREATE TABLE Seats (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     CarriageId INT NOT NULL,
     SeatNumber VARCHAR(10) NOT NULL,
-    SeatType VARCHAR(50) NOT NULL,
-    CONSTRAINT FK_Seats_Carriage FOREIGN KEY (CarriageId) REFERENCES Carriages(Id) ON DELETE CASCADE
+    SeatClassId INT NOT NULL,
+    CONSTRAINT FK_Seats_Carriage FOREIGN KEY (CarriageId) REFERENCES Carriages(Id) ON DELETE CASCADE,
+    CONSTRAINT FK_Seats_SeatClass FOREIGN KEY (SeatClassId) REFERENCES SeatClasses(Id) ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
 CREATE TABLE TrainTrips (
@@ -69,12 +79,15 @@ CREATE TABLE TrainTrips (
     CONSTRAINT FK_TrainTrips_Route FOREIGN KEY (RouteId) REFERENCES Routes(Id) ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
-CREATE TABLE TripSeatPrices (
+-- Fare: the price a train trip asks for one seat class.
+CREATE TABLE Fares (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     TrainTripId INT NOT NULL,
-    SeatTypeId VARCHAR(50) NOT NULL,
+    SeatClassId INT NOT NULL,
     Price DECIMAL(10, 2) NOT NULL,
-    CONSTRAINT FK_TripSeatPrices_TrainTrip FOREIGN KEY (TrainTripId) REFERENCES TrainTrips(Id) ON DELETE CASCADE
+    CONSTRAINT UQ_Fares_TrainTrip_SeatClass UNIQUE (TrainTripId, SeatClassId),
+    CONSTRAINT FK_Fares_TrainTrip FOREIGN KEY (TrainTripId) REFERENCES TrainTrips(Id) ON DELETE CASCADE,
+    CONSTRAINT FK_Fares_SeatClass FOREIGN KEY (SeatClassId) REFERENCES SeatClasses(Id) ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
 CREATE TABLE Users (
@@ -154,13 +167,21 @@ INSERT INTO Carriages (TrainId, CarriageNumber, Type, TotalSeats) VALUES
 (3, 1, 'VIP Cabin', 32),
 (4, 1, 'Soft Seat', 72);
 
--- 5. Seats (5 bản ghi)
-INSERT INTO Seats (CarriageId, SeatNumber, SeatType) VALUES
-(1, 'A01', 'Lower Berth'),
-(1, 'A02', 'Middle Berth'),
-(2, 'B01', 'Window Seat'),
-(2, 'B02', 'Aisle Seat'),
-(3, 'C01', 'Upper Berth');
+-- 5a. SeatClasses (5 records)
+INSERT INTO SeatClasses (Code, Name) VALUES
+('HARD_BERTH_LOWER', 'Hard sleeper, lower berth'),
+('HARD_BERTH_MIDDLE', 'Hard sleeper, middle berth'),
+('SOFT_SEAT', 'Soft seat'),
+('SOFT_BERTH_UPPER', 'Soft sleeper, upper berth'),
+('VIP_CABIN', 'VIP cabin berth');
+
+-- 5b. Seats (5 records)
+INSERT INTO Seats (CarriageId, SeatNumber, SeatClassId) VALUES
+(1, 'A01', 1),
+(1, 'A02', 2),
+(2, 'B01', 3),
+(2, 'B02', 3),
+(3, 'C01', 4);
 
 -- 6. TrainTrips (5 bản ghi)
 INSERT INTO TrainTrips (TrainId, RouteId, DepartureTime, ArrivalTime, Status) VALUES
@@ -170,13 +191,13 @@ INSERT INTO TrainTrips (TrainId, RouteId, DepartureTime, ArrivalTime, Status) VA
 (4, 4, '2026-11-13 09:30:00', '2026-11-13 23:00:00', 'Scheduled'),
 (5, 5, '2026-11-14 20:00:00', '2026-11-15 05:30:00', 'Scheduled');
 
--- 7. TripSeatPrices (5 bản ghi)
-INSERT INTO TripSeatPrices (TrainTripId, SeatTypeId, Price) VALUES
-(1, 'Lower Berth', 1200000.00),
-(1, 'Soft Seat', 750000.00),
-(2, 'Window Seat', 850000.00),
-(3, 'VIP Cabin', 1500000.00),
-(4, 'Soft Seat', 700000.00);
+-- 7. Fares (5 records). Trip 1 has no fare for HARD_BERTH_MIDDLE on purpose: that seat is not bookable.
+INSERT INTO Fares (TrainTripId, SeatClassId, Price) VALUES
+(1, 1, 1200000.00),
+(1, 3, 750000.00),
+(2, 4, 850000.00),
+(3, 5, 1500000.00),
+(4, 3, 700000.00);
 
 -- 8. Users (5 bản ghi)
 INSERT INTO Users (Email, PasswordHash, FullName, PhoneNumber, Role) VALUES

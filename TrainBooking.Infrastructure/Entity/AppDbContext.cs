@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
@@ -30,7 +30,9 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Traintrip> Traintrips { get; set; }
 
-    public virtual DbSet<Tripseatprice> Tripseatprices { get; set; }
+    public virtual DbSet<Fare> Fares { get; set; }
+
+    public virtual DbSet<SeatClass> SeatClasses { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -104,6 +106,10 @@ public partial class AppDbContext : DbContext
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.HasOne(d => d.Carriage).WithMany(p => p.Seats).HasConstraintName("FK_Seats_Carriage");
+
+            entity.HasOne(d => d.SeatClass).WithMany(p => p.Seats)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Seats_SeatClass");
         });
 
         modelBuilder.Entity<Station>(entity =>
@@ -134,11 +140,20 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.Train).WithMany(p => p.Traintrips).HasConstraintName("FK_TrainTrips_Train");
         });
 
-        modelBuilder.Entity<Tripseatprice>(entity =>
+        modelBuilder.Entity<Fare>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.HasOne(d => d.TrainTrip).WithMany(p => p.Tripseatprices).HasConstraintName("FK_TripSeatPrices_TrainTrip");
+            entity.HasOne(d => d.TrainTrip).WithMany(p => p.Fares).HasConstraintName("FK_Fares_TrainTrip");
+
+            entity.HasOne(d => d.SeatClass).WithMany(p => p.Fares)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Fares_SeatClass");
+        });
+
+        modelBuilder.Entity<SeatClass>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
         });
 
         modelBuilder.Entity<User>(entity =>

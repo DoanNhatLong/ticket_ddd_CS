@@ -28,6 +28,15 @@ internal sealed class UserRepository : IUserRepository
         return records.Select(ToDomain).ToList();
     }
 
+    public async Task<DomainUser?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var record = await _context.Users
+            .AsNoTracking()
+            .SingleOrDefaultAsync(u => u.Id == id, cancellationToken);
+
+        return record is null ? null : ToDomain(record);
+    }
+
     private static DomainUser ToDomain(UserRecord record)
     {
         return DomainUser.Rehydrate(
