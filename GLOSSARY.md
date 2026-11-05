@@ -45,7 +45,7 @@ A paid booking that still has at least one active ticket.
 _Avoid_: Paid booking, successful booking
 
 **Cancelled booking**:
-A paid booking in which every ticket has been cancelled.
+A booking in which every ticket has been cancelled by the customer, either before payment (no refund) or after it.
 _Avoid_: Void booking, refunded booking
 
 **Completed booking**:
