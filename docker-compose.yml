@@ -8,10 +8,32 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is not set, copy .env.example to .env}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-0test1}
+      # Used by monitoring/mysql/create-exporter-user.sh to create the 'exporter' user.
+      MYSQL_EXPORTER_PASSWORD: ${MYSQL_EXPORTER_PASSWORD:?MYSQL_EXPORTER_PASSWORD is not set, copy .env.example to .env}
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./monitoring/mysql/create-exporter-user.sh:/docker-entrypoint-initdb.d/create-exporter-user.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+  mysqld-exporter:
+    image: prom/mysqld-exporter:v0.15.1
+    container_name: train_mysqld_exporter
+    # No host port: only Prometheus (same compose network) scrapes mysqld-exporter:9104.
+    command:
+      - "--mysqld.address=mysql-db:3306"
+      - "--mysqld.username=exporter"
+    environment:
+      MYSQLD_EXPORTER_PASSWORD: ${MYSQL_EXPORTER_PASSWORD:?MYSQL_EXPORTER_PASSWORD is not set, copy .env.example to .env}
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    restart: always
   grafana:
     image: grafana/grafana:latest
     container_name: train_grafana

@@ -13,3 +13,8 @@ scrape_configs:
     metrics_path: /metrics
     static_configs:
       - targets: ["host.docker.internal:7777"]
+
+  # mysqld_exporter runs inside the compose network next to MySQL (train_mysql).
+  - job_name: "mysql"
+    static_configs:
+      - targets: ["mysqld-exporter:9104"]
