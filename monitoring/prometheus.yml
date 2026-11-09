@@ -18,3 +18,8 @@ scrape_configs:
   - job_name: "mysql"
     static_configs:
       - targets: ["mysqld-exporter:9104"]
+
+  # redis_exporter runs inside the compose network next to Redis (train_redis).
+  - job_name: "redis"
+    static_configs:
+      - targets: ["redis-exporter:9121"]

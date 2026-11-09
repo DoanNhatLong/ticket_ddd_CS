@@ -73,6 +73,17 @@ services:
       timeout: 3s
       retries: 5
     restart: always
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.62.0
+    container_name: train_redis_exporter
+    # No host port: only Prometheus (same compose network) scrapes redis-exporter:9121.
+    # Redis has no password; if requirepass is enabled later, pass REDIS_PASSWORD from .env.
+    environment:
+      REDIS_ADDR: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: always
 volumes:
   mysql_data:
   prometheus_data:
