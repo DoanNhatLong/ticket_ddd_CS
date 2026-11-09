@@ -7,13 +7,19 @@ namespace TrainBooking.Domain.Trains;
 /// </summary>
 public sealed class Seat : Entity
 {
-    private Seat(int id, int carriageNumber, string seatNumber, SeatClass seatClass)
+    private Seat(int id, int trainId, int carriageNumber, string seatNumber, SeatClass seatClass)
         : base(id)
     {
+        TrainId = trainId;
         CarriageNumber = carriageNumber;
         SeatNumber = seatNumber;
         SeatClass = seatClass;
     }
+
+    /// <summary>
+    /// The train this seat belongs to.
+    /// </summary>
+    public int TrainId { get; private set; }
 
     public int CarriageNumber { get; private set; }
 
@@ -24,8 +30,8 @@ public sealed class Seat : Entity
     /// <summary>
     /// Rebuilds a seat from persisted state. Intended for repositories only.
     /// </summary>
-    public static Seat Rehydrate(int id, int carriageNumber, string seatNumber, SeatClass seatClass)
+    public static Seat Rehydrate(int id, int trainId, int carriageNumber, string seatNumber, SeatClass seatClass)
     {
-        return new Seat(id, carriageNumber, seatNumber, seatClass);
+        return new Seat(id, trainId, carriageNumber, seatNumber, seatClass);
     }
 }

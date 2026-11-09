@@ -3,6 +3,7 @@ using TrainBooking.Domain.Trains;
 using TrainBooking.Infrastructure.Entity;
 using DomainSeat = TrainBooking.Domain.Trains.Seat;
 using DomainSeatClass = TrainBooking.Domain.Trains.SeatClass;
+using SeatRecord = TrainBooking.Infrastructure.Entity.Seat;
 
 namespace TrainBooking.Infrastructure.Repositories.SeatRepository;
 
@@ -18,14 +19,29 @@ internal sealed class SeatRepository : ISeatRepository
         _context = context;
     }
 
-    public async Task<IReadOnlyList<DomainSeat>> GetByTrainAsync(int trainId, CancellationToken cancellationToken = default)
+    public Task<IReadOnlyList<DomainSeat>> GetByTrainAsync(int trainId, CancellationToken cancellationToken = default)
     {
-        var records = await _context.Seats
+        return QueryAsync(_context.Seats.Where(s => s.Carriage.TrainId == trainId), cancellationToken);
+    }
+
+    public Task<IReadOnlyList<DomainSeat>> GetByIdsAsync(
+        IReadOnlyCollection<int> seatIds,
+        CancellationToken cancellationToken = default)
+    {
+        var ids = seatIds.ToList();
+        return QueryAsync(_context.Seats.Where(s => ids.Contains(s.Id)), cancellationToken);
+    }
+
+    private static async Task<IReadOnlyList<DomainSeat>> QueryAsync(
+        IQueryable<SeatRecord> seats,
+        CancellationToken cancellationToken)
+    {
+        var records = await seats
             .AsNoTracking()
-            .Where(s => s.Carriage.TrainId == trainId)
             .Select(s => new
             {
                 s.Id,
+                s.Carriage.TrainId,
                 s.Carriage.CarriageNumber,
                 s.SeatNumber,
                 SeatClassId = s.SeatClass.Id,
@@ -39,6 +55,7 @@ internal sealed class SeatRepository : ISeatRepository
         return records
             .Select(r => DomainSeat.Rehydrate(
                 r.Id,
+                r.TrainId,
                 r.CarriageNumber,
                 r.SeatNumber,
                 new DomainSeatClass(r.SeatClassId, r.SeatClassCode, r.SeatClassName)))

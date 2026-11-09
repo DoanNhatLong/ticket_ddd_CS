@@ -22,7 +22,7 @@ public partial class Seat
     public int SeatClassId { get; set; }
 
     [InverseProperty("Seat")]
-    public virtual ICollection<Bookingitem> Bookingitems { get; set; } = new List<Bookingitem>();
+    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
     [ForeignKey("CarriageId")]
     [InverseProperty("Seats")]

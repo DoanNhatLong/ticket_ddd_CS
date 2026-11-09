@@ -32,7 +32,7 @@ public partial class Booking
     public DateTime ExpiresAt { get; set; }
 
     [InverseProperty("Booking")]
-    public virtual ICollection<Bookingitem> Bookingitems { get; set; } = new List<Bookingitem>();
+    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
     [InverseProperty("Booking")]
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();

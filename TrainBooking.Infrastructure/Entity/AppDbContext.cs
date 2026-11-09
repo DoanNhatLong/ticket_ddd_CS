@@ -14,7 +14,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Booking> Bookings { get; set; }
 
-    public virtual DbSet<Bookingitem> Bookingitems { get; set; }
+    public virtual DbSet<Ticket> Tickets { get; set; }
 
     public virtual DbSet<Carriage> Carriages { get; set; }
 
@@ -57,19 +57,27 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK_Bookings_User");
         });
 
-        modelBuilder.Entity<Bookingitem>(entity =>
+        modelBuilder.Entity<Ticket>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.HasOne(d => d.Booking).WithMany(p => p.Bookingitems).HasConstraintName("FK_BookingItems_Booking");
+            entity.Property(e => e.Status).HasDefaultValueSql("'Held'");
 
-            entity.HasOne(d => d.Seat).WithMany(p => p.Bookingitems)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_BookingItems_Seat");
+            // Generated column (see init.sql): EF must never insert or update it.
+            entity.Property(e => e.OccupiedSeatKey)
+                .HasComputedColumnSql(
+                    "CASE WHEN Status IN ('Held', 'Active') THEN CONCAT(TrainTripId, ':', SeatId) END",
+                    stored: true);
 
-            entity.HasOne(d => d.TrainTrip).WithMany(p => p.Bookingitems)
+            entity.HasOne(d => d.Booking).WithMany(p => p.Tickets).HasConstraintName("FK_Tickets_Booking");
+
+            entity.HasOne(d => d.Seat).WithMany(p => p.Tickets)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_BookingItems_TrainTrip");
+                .HasConstraintName("FK_Tickets_Seat");
+
+            entity.HasOne(d => d.TrainTrip).WithMany(p => p.Tickets)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Tickets_TrainTrip");
         });
 
         modelBuilder.Entity<Carriage>(entity =>

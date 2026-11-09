@@ -31,7 +31,7 @@ public partial class Traintrip
     public DateTime? CreatedAt { get; set; }
 
     [InverseProperty("TrainTrip")]
-    public virtual ICollection<Bookingitem> Bookingitems { get; set; } = new List<Bookingitem>();
+    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 
     [ForeignKey("RouteId")]
     [InverseProperty("Traintrips")]
