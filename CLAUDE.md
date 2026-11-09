@@ -17,10 +17,21 @@
 - Database: MySQL. All SQL, including `init.sql`, must use MySQL syntax.
 - Use a MySQL EF Core provider (e.g. Pomelo.EntityFrameworkCore.MySql). Do not use SQL Server or PostgreSQL providers.
 
+## Priorities
+- Business logic (domain rules, use cases, API behaviour) comes first.
+- Testing is deferred: do NOT write, update or fix tests unless the user explicitly asks for it.
+  Tickets' "tests cover the above" criteria stay open until then.
+- When a code change breaks existing tests, say so in the report instead of fixing them.
+
+## Task estimates
+- When the user assigns a task, first give a rough estimate of the tokens it will consume
+  (e.g. small < 50k, medium 50k–150k, large > 150k, with a number) and what drives the cost,
+  then proceed unless the user objects.
+
 ## Commands
 - Build: `dotnet build`
-- Test: `dotnet test`
-- After changing code, run build and test, and fix errors before reporting the task as done.
+- Test: `dotnet test` (only when the user asks for testing work)
+- After changing code, run `dotnet build` and fix compile errors before reporting the task as done.
 
 ## Database
 - Never run scripts against a real/production database. Use a test database only.
