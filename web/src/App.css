@@ -1,42 +1,367 @@
-.page {
-  max-width: 760px;
+/* ---------- Layout ---------- */
+
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar-inner,
+.content {
+  max-width: 960px;
   margin: 0 auto;
-  padding: 32px 16px;
+  padding: 0 16px;
 }
 
-.trip-picker {
-  display: inline-flex;
-  gap: 8px;
+.topbar-inner {
+  height: 60px;
+  display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  justify-content: space-between;
 }
 
-.trip-times {
-  color: #555;
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.15rem;
 }
 
-.error {
-  color: #c62828;
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--brand-soft);
 }
 
-.seats {
-  width: 100%;
-  border-collapse: collapse;
+.topbar-note {
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
-.seats th,
-.seats td {
-  padding: 8px 12px;
-  border-bottom: 1px solid #ddd;
-  text-align: left;
+.content {
+  padding-top: 24px;
+  padding-bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.seats .free {
-  color: #2e7d32;
+.dimmed {
+  opacity: 0.55;
+  transition: opacity 0.15s;
+}
+
+/* ---------- Trip tabs ---------- */
+
+.trip-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.trip-tab {
+  flex: 0 0 auto;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.trip-tab:hover {
+  border-color: var(--brand);
+}
+
+.trip-tab.active {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+/* ---------- Trip card ---------- */
+
+.trip-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px 32px;
+  align-items: center;
+}
+
+.trip-timeline {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.trip-point {
+  display: flex;
+  flex-direction: column;
+}
+
+.trip-point.end {
+  text-align: right;
+}
+
+.trip-time {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.trip-date {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.trip-line {
+  flex: 1;
+  position: relative;
+  height: 2px;
+  min-width: 60px;
+  background: var(--border);
+}
+
+.trip-line::before,
+.trip-line::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand);
+  transform: translateY(-50%);
+}
+
+.trip-line::before {
+  left: 0;
+}
+
+.trip-line::after {
+  right: 0;
+}
+
+.trip-duration {
+  position: absolute;
+  left: 50%;
+  top: -24px;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.trip-stats {
+  display: flex;
+  gap: 24px;
+  margin: 0;
+}
+
+.trip-stats dt {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.trip-stats dd {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.trip-stats small {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.trip-footnote {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* ---------- Legend ---------- */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 2px solid;
+}
+
+.swatch.free {
+  background: var(--free-soft);
+  border-color: var(--free);
+}
+
+.swatch.taken {
+  background: var(--taken-soft);
+  border-color: var(--taken);
+}
+
+.swatch.not-sold {
+  background: var(--not-sold-soft);
+  border-color: var(--not-sold);
+}
+
+/* ---------- Carriages and seats ---------- */
+
+.carriages {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.carriage {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 16px 20px 20px;
+}
+
+.carriage-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+.carriage-count {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--free);
+}
+
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.seat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.seat.free {
+  background: var(--free-soft);
+  border-color: var(--free);
+}
+
+.seat.free:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.seat.taken {
+  background: var(--taken-soft);
+  border-color: var(--taken);
+  opacity: 0.75;
+}
+
+.seat.not-sold {
+  background: var(--not-sold-soft);
+  border-color: var(--not-sold);
+  border-style: dashed;
+  opacity: 0.7;
+}
+
+.seat-number {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.seat-class {
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+.seat-price {
+  margin-top: 4px;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 
-.seats .taken {
-  color: #c62828;
-  font-weight: 600;
+.seat.taken .seat-price,
+.seat.not-sold .seat-price {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+/* ---------- Messages ---------- */
+
+.alert {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--taken-soft);
+  color: var(--taken);
+  border: 1px solid var(--taken);
+}
+
+.placeholder {
+  padding: 32px;
+  text-align: center;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 640px) {
+  .trip-card {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .trip-time {
+    font-size: 1.4rem;
+  }
+
+  .seat-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
 }
