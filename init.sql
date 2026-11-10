@@ -201,11 +201,11 @@ INSERT INTO Seats (CarriageId, SeatNumber, SeatClassId) VALUES
 
 -- 6. TrainTrips (5 bản ghi)
 INSERT INTO TrainTrips (TrainId, RouteId, DepartureTime, ArrivalTime, Status) VALUES
-(1, 1, '2026-11-10 06:00:00', '2026-11-10 23:30:00', 'Scheduled'),
-(2, 2, '2026-11-11 08:00:00', '2026-11-11 22:00:00', 'Scheduled'),
-(3, 3, '2026-11-12 07:15:00', '2026-11-12 21:00:00', 'Scheduled'),
-(4, 4, '2026-11-13 09:30:00', '2026-11-13 23:00:00', 'Scheduled'),
-(5, 5, '2026-11-14 20:00:00', '2026-11-15 05:30:00', 'Scheduled');
+(1, 1, '2027-01-10 06:00:00', '2027-01-10 23:30:00', 'Scheduled'),
+(2, 2, '2027-01-11 08:00:00', '2027-01-11 22:00:00', 'Scheduled'),
+(3, 3, '2027-01-12 07:15:00', '2027-01-12 21:00:00', 'Scheduled'),
+(4, 4, '2027-01-13 09:30:00', '2027-01-13 23:00:00', 'Scheduled'),
+(5, 5, '2027-01-14 20:00:00', '2027-01-15 05:30:00', 'Scheduled');
 
 -- 7. Fares (5 records). Trip 1 has no fare for HARD_BERTH_MIDDLE on purpose: that seat is not bookable.
 INSERT INTO Fares (TrainTripId, SeatClassId, Price) VALUES
