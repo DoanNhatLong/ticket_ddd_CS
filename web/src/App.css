@@ -1,0 +1,42 @@
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.trip-picker {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.trip-times {
+  color: #555;
+}
+
+.error {
+  color: #c62828;
+}
+
+.seats {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.seats th,
+.seats td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.seats .free {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.seats .taken {
+  color: #c62828;
+  font-weight: 600;
+}
