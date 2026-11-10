@@ -38,7 +38,16 @@
 - Any change to `init.sql` must be reported (see global rules).
 
 ## Structure
-- `<fill in>`: one line per project/folder, e.g. `src/TrainBooking.Domain`, `src/TrainBooking.Application`, `src/TrainBooking.Infrastructure`, `src/TrainBooking.Api`.
+- `TrainBooking.Domain/`: aggregates, entities, value objects, repository interfaces, domain errors.
+- `TrainBooking.Application/`: MediatR commands/queries, handlers, pipeline behaviors, response DTOs.
+- `TrainBooking.Infrastructure/`: EF Core (scaffolded entities, `AppDbContext`), repository implementations, Redis.
+- `TrainBooking.Api/`: FastEndpoints endpoints, HTTP error mapping, composition root (`Program.cs`).
+- `TrainBooking.Api.Tests/`: HTTP-level integration tests against the MySQL test database.
+- `web/`: React + Vite + TypeScript frontend. Its own rules are in `web/CLAUDE.md`.
+- `monitoring/`: Prometheus config, Grafana provisioning, MySQL exporter user script.
+- `docs/`: ADRs, agent docs, Postman collection. `.scratch/`: specs and tickets.
+- `init.sql`: MySQL schema and seed data.
+- The rules in this file about .NET, DDD and `dotnet build` apply to the backend projects only.
 
 ## Agent skills
 
