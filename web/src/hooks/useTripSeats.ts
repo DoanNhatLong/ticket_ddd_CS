@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { getTripSeats, type TripSeats } from '../api/trainTrips'
 
 interface TripSeatsState {
   trip: TripSeats | null
   loading: boolean
   error: string | null
+  /** Loads the seat map again, e.g. after a booking changed which seats are free. */
+  reload: () => void
 }
 
 /**
@@ -15,6 +17,7 @@ export function useTripSeats(tripId: number): TripSeatsState {
   const [trip, setTrip] = useState<TripSeats | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [version, setVersion] = useState(0)
 
   useEffect(() => {
     let cancelled = false
@@ -38,7 +41,9 @@ export function useTripSeats(tripId: number): TripSeatsState {
     return () => {
       cancelled = true
     }
-  }, [tripId])
+  }, [tripId, version])
 
-  return { trip, loading, error }
+  const reload = useCallback(() => setVersion((v) => v + 1), [])
+
+  return { trip, loading, error, reload }
 }

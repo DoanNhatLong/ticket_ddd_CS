@@ -5,11 +5,13 @@ import { CarriageCard } from './CarriageCard'
 interface SeatMapProps {
   seats: TripSeat[]
   dimmed?: boolean
+  /** Ids of the seats on this trip the customer has picked. */
+  selectedSeatIds?: ReadonlySet<number>
   onSelectSeat?: (seat: TripSeat) => void
 }
 
 /** All seats of a train trip, grouped by carriage. */
-export function SeatMap({ seats, dimmed = false, onSelectSeat }: SeatMapProps) {
+export function SeatMap({ seats, dimmed = false, selectedSeatIds, onSelectSeat }: SeatMapProps) {
   const carriages = useMemo(() => {
     const groups = new Map<number, TripSeat[]>()
     for (const seat of seats) {
@@ -31,6 +33,7 @@ export function SeatMap({ seats, dimmed = false, onSelectSeat }: SeatMapProps) {
           key={carriageNumber}
           carriageNumber={carriageNumber}
           seats={carriageSeats}
+          selectedSeatIds={selectedSeatIds}
           onSelectSeat={onSelectSeat}
         />
       ))}

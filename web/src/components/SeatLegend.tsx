@@ -1,17 +1,16 @@
-import type { SeatState } from './seatState'
-
-const ITEMS: { state: SeatState; label: string }[] = [
-  { state: 'free', label: 'Free' },
-  { state: 'taken', label: 'Taken' },
-  { state: 'not-sold', label: 'Not sold on this trip' },
+const ITEMS: { className: string; label: string }[] = [
+  { className: 'free', label: 'Free' },
+  { className: 'selected', label: 'Selected' },
+  { className: 'taken', label: 'Taken' },
+  { className: 'not-sold', label: 'Not sold on this trip' },
 ]
 
 export function SeatLegend() {
   return (
     <ul className="legend">
-      {ITEMS.map(({ state, label }) => (
-        <li key={state}>
-          <span className={`swatch ${state}`} /> {label}
+      {ITEMS.map(({ className, label }) => (
+        <li key={className}>
+          <span className={`swatch ${className}`} /> {label}
         </li>
       ))}
     </ul>

@@ -5,10 +5,11 @@ import { seatState } from './seatState'
 interface CarriageCardProps {
   carriageNumber: number
   seats: TripSeat[]
+  selectedSeatIds?: ReadonlySet<number>
   onSelectSeat?: (seat: TripSeat) => void
 }
 
-export function CarriageCard({ carriageNumber, seats, onSelectSeat }: CarriageCardProps) {
+export function CarriageCard({ carriageNumber, seats, selectedSeatIds, onSelectSeat }: CarriageCardProps) {
   const freeCount = seats.filter((s) => seatState(s) === 'free').length
 
   return (
@@ -19,7 +20,12 @@ export function CarriageCard({ carriageNumber, seats, onSelectSeat }: CarriageCa
       </h2>
       <div className="seat-grid">
         {seats.map((seat) => (
-          <SeatTile key={seat.seatId} seat={seat} onSelect={onSelectSeat} />
+          <SeatTile
+            key={seat.seatId}
+            seat={seat}
+            selected={selectedSeatIds?.has(seat.seatId) ?? false}
+            onSelect={onSelectSeat}
+          />
         ))}
       </div>
     </section>

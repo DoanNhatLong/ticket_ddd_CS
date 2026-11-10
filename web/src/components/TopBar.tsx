@@ -1,9 +1,11 @@
+import type { ReactNode } from 'react'
+
 interface TopBarProps {
-  /** Short label shown on the right, e.g. the current page. */
-  note?: string
+  /** Content shown on the right, e.g. the customer picker. */
+  children?: ReactNode
 }
 
-export function TopBar({ note }: TopBarProps) {
+export function TopBar({ children }: TopBarProps) {
   return (
     <header className="topbar">
       <div className="topbar-inner">
@@ -11,7 +13,7 @@ export function TopBar({ note }: TopBarProps) {
           <span className="brand-mark" aria-hidden="true">🚆</span>
           TrainBooking
         </span>
-        {note && <span className="topbar-note">{note}</span>}
+        {children}
       </div>
     </header>
   )

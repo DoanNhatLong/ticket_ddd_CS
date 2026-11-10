@@ -365,3 +365,353 @@
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
   }
 }
+
+/* ---------- Customer picker ---------- */
+
+.customer-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.customer-name {
+  color: var(--muted);
+}
+
+.customer-picker select {
+  font: inherit;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* ---------- Two-column booking layout ---------- */
+
+.topbar-inner,
+.content {
+  max-width: 1200px;
+}
+
+.booking-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 24px;
+  align-items: start;
+}
+
+.booking-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .booking-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Selectable / selected seats ---------- */
+
+.seat.selectable {
+  cursor: pointer;
+}
+
+.seat.selectable:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.seat.selected {
+  background: var(--brand-soft);
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-soft);
+}
+
+.seat-number {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.seat-check {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+.swatch.selected {
+  background: var(--brand-soft);
+  border-color: var(--brand);
+}
+
+/* ---------- Booking panel ---------- */
+
+.booking-panel {
+  position: sticky;
+  top: 84px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.panel-head h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.panel-empty {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 16px;
+}
+
+.selected-seats {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
+.selected-seat {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.selected-seat-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.selected-seat-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ticket-index {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.selected-seat-meta {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin: 2px 0 10px 30px;
+}
+
+.field-row {
+  display: grid;
+  gap: 8px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.field input {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--bg);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.field input:focus {
+  outline: 2px solid var(--brand);
+  outline-offset: 0;
+  border-color: var(--brand);
+}
+
+.panel-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.panel-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--muted);
+}
+
+.panel-total strong {
+  font-size: 1.3rem;
+  color: var(--text);
+}
+
+.panel-hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.booking-panel .alert {
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+/* ---------- Buttons ---------- */
+
+.primary-button,
+.secondary-button {
+  font: inherit;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  border: 1px solid var(--brand);
+  transition: filter 0.15s, opacity 0.15s;
+}
+
+.primary-button {
+  background: var(--brand);
+  color: #fff;
+}
+
+.secondary-button {
+  background: var(--surface);
+  color: var(--brand);
+  padding: 8px 14px;
+}
+
+.primary-button:hover:not(:disabled),
+.secondary-button:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.primary-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.link-button {
+  font: inherit;
+  font-size: 0.85rem;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--brand);
+  cursor: pointer;
+}
+
+.link-button:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+/* ---------- Booking confirmation ---------- */
+
+.confirmation {
+  background: var(--surface);
+  border: 1px solid var(--free);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.confirmation-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.confirmation-label {
+  margin: 0;
+  color: var(--free);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.booking-code {
+  margin: 2px 0 0;
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  letter-spacing: 0.05em;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.hold-timer {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--free-soft);
+  font-size: 0.9rem;
+}
+
+.hold-timer.over {
+  background: var(--taken-soft);
+  color: var(--taken);
+}
+
+.confirmation-tickets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.confirmation-tickets li {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.confirmation-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
