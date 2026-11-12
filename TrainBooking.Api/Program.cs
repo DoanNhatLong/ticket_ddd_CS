@@ -2,6 +2,7 @@ using FastEndpoints;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using Polly;
+using TrainBooking.Api.Background;
 using TrainBooking.Api.Http;
 using TrainBooking.Application;
 using TrainBooking.Infrastructure;
@@ -13,6 +14,9 @@ builder.Services
     .AddInfrastructure(builder.Configuration);
 
 builder.Services.AddFastEndpoints();
+
+// Releases the seats of unpaid bookings whose seat hold has run out.
+builder.Services.AddHostedService<BookingExpiryService>();
 
 // Unhandled exceptions become a 500 problem response instead of an empty body.
 builder.Services.AddExceptionHandler<UnhandledExceptionHandler>();

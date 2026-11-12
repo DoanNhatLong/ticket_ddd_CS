@@ -4,11 +4,13 @@
 
 **Blocked by:** 03
 
-**Status:** ready-for-agent
+**Status:** in-progress (business logic done; tests deferred)
 
-- [ ] Booking status gains `Expired` (domain and `init.sql`; change reported).
-- [ ] Booking a seat whose previous hold has run out succeeds: the overdue booking is expired in the same transaction.
-- [ ] A background service periodically expires overdue bookings and clears their occupied-seat keys.
-- [ ] Expired bookings show as `Expired` in `GET /api/bookings/{code}` and in the existing `GET /api/bookings`.
-- [ ] `POST /api/bookings/{code}/cancel` on a pending booking → `Cancelled`, seats released, no refund.
+- [x] Booking status gains `Expired` (domain and `init.sql`; change reported).
+- [x] Booking a seat whose previous hold has run out succeeds: the overdue booking is expired in the same transaction.
+- [x] A background service periodically expires overdue bookings and clears their occupied-seat keys.
+- [x] Expired bookings show as `Expired` in `GET /api/bookings/{code}` and in the existing `GET /api/bookings`.
+- [x] `POST /api/bookings/{code}/cancel` on a pending booking → `Cancelled`, seats released, no refund.
 - [ ] Tests move the fake clock past the hold instead of sleeping.
+
+**Decisions:** tickets of an expired booking become `Cancelled` (no separate ticket status). `GET /api/bookings/{code}` and cancel also expire an overdue booking on the spot. Background interval: `BookingExpiry:IntervalSeconds` (default 30, 0 disables).

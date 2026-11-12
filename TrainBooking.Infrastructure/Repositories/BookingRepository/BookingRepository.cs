@@ -48,23 +48,84 @@ internal sealed class BookingRepository : IBookingRepository
         return record is null ? null : ToDomain(record);
     }
 
-    public async Task<Result> AddAsync(DomainBooking booking, CancellationToken cancellationToken = default)
+    public async Task<Result> AddAsync(
+        DomainBooking booking,
+        IReadOnlyCollection<DomainBooking> expiredBookings,
+        CancellationToken cancellationToken = default)
     {
-        var record = ToRecord(booking);
-        _context.Bookings.Add(record);
+        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
 
         try
         {
+            // Release the expired holds first, in their own statements, so the unique occupied-seat
+            // index no longer sees them when the new tickets are inserted.
+            if (expiredBookings.Count > 0)
+            {
+                await ApplyStatusChangesAsync(expiredBookings, cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+
+            _context.Bookings.Add(ToRecord(booking));
             await _context.SaveChangesAsync(cancellationToken);
+
+            await transaction.CommitAsync(cancellationToken);
             return Result.Success();
         }
         catch (DbUpdateException exception) when (IsOccupiedSeatViolation(exception))
         {
-            // Another booking holds or owns one of the seats. Forget the failed insert so the
-            // scoped context stays usable for the rest of the request.
+            // Another booking holds or owns one of the seats. Roll back (the expiries too, which the
+            // background expiry will redo) and forget the failed changes so the scoped context stays
+            // usable for the rest of the request.
+            await transaction.RollbackAsync(cancellationToken);
             _context.ChangeTracker.Clear();
             return BookingErrors.SeatTaken;
         }
+    }
+
+    public async Task UpdateAsync(DomainBooking booking, CancellationToken cancellationToken = default)
+    {
+        await ApplyStatusChangesAsync([booking], cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<DomainBooking>> GetOverdueHoldingSeatsAsync(
+        IReadOnlyCollection<(int TrainTripId, int SeatId)> seats,
+        DateTime nowUtc,
+        CancellationToken cancellationToken = default)
+    {
+        if (seats.Count == 0)
+            return [];
+
+        // Same format as the generated Tickets.OccupiedSeatKey column.
+        var seatKeys = seats.Select(s => $"{s.TrainTripId}:{s.SeatId}").ToList();
+        var pending = nameof(BookingStatus.Pending);
+
+        var records = await _context.Bookings
+            .AsNoTracking()
+            .Include(b => b.Tickets.OrderBy(t => t.Id))
+            .Where(b => b.Status == pending && b.ExpiresAt <= nowUtc)
+            .Where(b => b.Tickets.Any(t => t.OccupiedSeatKey != null && seatKeys.Contains(t.OccupiedSeatKey)))
+            .ToListAsync(cancellationToken);
+
+        return records.Select(ToDomain).ToList();
+    }
+
+    public async Task<IReadOnlyList<DomainBooking>> GetOverdueAsync(
+        DateTime nowUtc,
+        int maxCount,
+        CancellationToken cancellationToken = default)
+    {
+        var pending = nameof(BookingStatus.Pending);
+
+        var records = await _context.Bookings
+            .AsNoTracking()
+            .Include(b => b.Tickets.OrderBy(t => t.Id))
+            .Where(b => b.Status == pending && b.ExpiresAt <= nowUtc)
+            .OrderBy(b => b.ExpiresAt)
+            .Take(maxCount)
+            .ToListAsync(cancellationToken);
+
+        return records.Select(ToDomain).ToList();
     }
 
     public async Task<IReadOnlySet<int>> GetTakenSeatIdsAsync(
@@ -84,6 +145,33 @@ internal sealed class BookingRepository : IBookingRepository
             .ToListAsync(cancellationToken);
 
         return seatIds.ToHashSet();
+    }
+
+    /// <summary>
+    /// Copies the booking and ticket statuses of <paramref name="bookings"/> onto tracked records.
+    /// Statuses are the only state that changes after a booking is created.
+    /// </summary>
+    private async Task ApplyStatusChangesAsync(
+        IReadOnlyCollection<DomainBooking> bookings,
+        CancellationToken cancellationToken)
+    {
+        var ids = bookings.Select(b => b.Id).ToList();
+        var records = await _context.Bookings
+            .Include(b => b.Tickets)
+            .Where(b => ids.Contains(b.Id))
+            .ToDictionaryAsync(b => b.Id, cancellationToken);
+
+        foreach (var booking in bookings)
+        {
+            if (!records.TryGetValue(booking.Id, out var record))
+                throw new InvalidOperationException($"Booking {booking.Id} does not exist.");
+
+            record.Status = booking.Status.ToString();
+
+            var ticketRecords = record.Tickets.ToDictionary(t => t.Id);
+            foreach (var ticket in booking.Tickets)
+                ticketRecords[ticket.Id].Status = ticket.Status.ToString();
+        }
     }
 
     private static bool IsOccupiedSeatViolation(DbUpdateException exception)

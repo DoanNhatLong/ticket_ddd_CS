@@ -58,17 +58,26 @@ public sealed class CreateBookingCommandHandler
                 t.PassengerIdNumber ?? string.Empty))
             .ToList();
 
+        var nowUtc = _clock.GetUtcNow().UtcDateTime;
+
         // CustomerAuthenticationBehavior guarantees a known customer.
         var created = Booking.Create(
             command.CustomerId!.Value,
             BookingCodeGenerator.New(),
             ticketRequests,
-            _clock.GetUtcNow().UtcDateTime);
+            nowUtc);
 
         if (created.IsFailure)
             return created.Error;
 
-        var saved = await _bookingRepository.AddAsync(created.Value, cancellationToken);
+        // Seats whose previous hold has run out go back on sale now, without waiting for the
+        // background expiry: the overdue bookings are expired in the same transaction.
+        var requestedSeats = created.Value.Tickets.Select(t => (t.TrainTripId, t.SeatId)).ToList();
+        var overdue = await _bookingRepository.GetOverdueHoldingSeatsAsync(requestedSeats, nowUtc, cancellationToken);
+        foreach (var overdueBooking in overdue)
+            overdueBooking.Expire(nowUtc);
+
+        var saved = await _bookingRepository.AddAsync(created.Value, overdue, cancellationToken);
         if (saved.IsFailure)
             return saved.Error;
 

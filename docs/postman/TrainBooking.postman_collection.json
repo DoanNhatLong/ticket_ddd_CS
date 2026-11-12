@@ -5,10 +5,22 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:7777" },
-    { "key": "customerId", "value": "1" },
-    { "key": "tripId", "value": "1" },
-    { "key": "bookingCode", "value": "" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:7777"
+    },
+    {
+      "key": "customerId",
+      "value": "1"
+    },
+    {
+      "key": "tripId",
+      "value": "1"
+    },
+    {
+      "key": "bookingCode",
+      "value": ""
+    }
   ],
   "item": [
     {
@@ -18,11 +30,22 @@
           "name": "Current customer",
           "request": {
             "method": "GET",
-            "header": [ { "key": "X-Customer-Id", "value": "{{customerId}}" } ],
+            "header": [
+              {
+                "key": "X-Customer-Id",
+                "value": "{{customerId}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/customers/me",
-              "host": [ "{{baseUrl}}" ],
-              "path": [ "api", "customers", "me" ]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "customers",
+                "me"
+              ]
             },
             "description": "Returns the customer identified by X-Customer-Id. 401 when the header is missing, unknown, or not a customer."
           }
@@ -39,8 +62,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/train-trips/{{tripId}}/seats",
-              "host": [ "{{baseUrl}}" ],
-              "path": [ "api", "train-trips", "{{tripId}}", "seats" ]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "train-trips",
+                "{{tripId}}",
+                "seats"
+              ]
             },
             "description": "Every seat of the train trip with carriage, seat class, fare (null when not sold) and isFree.\n\nSeed train trip 1: A01, A03 (1,200,000), A02 (no fare), B01-B04 (750,000). A01, B01, B02 are held by seed bookings until 2026-11-03."
           }
@@ -71,18 +101,33 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "X-Customer-Id", "value": "{{customerId}}" },
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "X-Customer-Id",
+                "value": "{{customerId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"tickets\": [\n    {\n      \"trainTripId\": 1,\n      \"seatId\": 8,\n      \"passengerName\": \"Nguyen Van A\",\n      \"passengerIdNumber\": \"001099012345\"\n    }\n  ]\n}",
-              "options": { "raw": { "language": "json" } }
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
               "raw": "{{baseUrl}}/api/bookings",
-              "host": [ "{{baseUrl}}" ],
-              "path": [ "api", "bookings" ]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings"
+              ]
             },
             "description": "Creates a pending booking that holds the seats for 5 minutes. The body above books seat B03 (id 8) on train trip 1 for 750,000.\n\nSend it twice: the second time returns 409 Booking.SeatTaken.\n\nFree seats with a fare on trip 1: A03 (id 10), B03 (id 8), B04 (id 9). Free seat on trip 2: C02 (id 11)."
           }
@@ -91,11 +136,47 @@
           "name": "Booking by code",
           "request": {
             "method": "GET",
-            "header": [ { "key": "X-Customer-Id", "value": "{{customerId}}" } ],
+            "header": [
+              {
+                "key": "X-Customer-Id",
+                "value": "{{customerId}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/bookings/{{bookingCode}}",
-              "host": [ "{{baseUrl}}" ],
-              "path": [ "api", "bookings", "{{bookingCode}}" ]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "{{bookingCode}}"
+              ]
+            },
+            "description": "One of the customer's own bookings with its tickets. Another customer's booking returns 404."
+          }
+        },
+        {
+          "name": "Cancel unpaid booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Customer-Id",
+                "value": "{{customerId}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/bookings/{{bookingCode}}/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "{{bookingCode}}",
+                "cancel"
+              ]
             },
             "description": "One of the customer's own bookings with its tickets. Another customer's booking returns 404."
           }
@@ -107,8 +188,13 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/bookings",
-              "host": [ "{{baseUrl}}" ],
-              "path": [ "api", "bookings" ]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings"
+              ]
             },
             "description": "Every booking (no tickets), ordered by status then creation time."
           }
@@ -125,8 +211,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/users/summary",
-              "host": [ "{{baseUrl}}" ],
-              "path": [ "api", "users", "summary" ]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "summary"
+              ]
             }
           }
         }

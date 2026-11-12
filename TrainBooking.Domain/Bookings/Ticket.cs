@@ -54,6 +54,15 @@ public sealed class Ticket : Entity
     }
 
     /// <summary>
+    /// Releases the seat of a held ticket whose unpaid booking ends (cancelled or expired).
+    /// </summary>
+    internal void ReleaseHold()
+    {
+        if (Status == TicketStatus.Held)
+            Status = TicketStatus.Cancelled;
+    }
+
+    /// <summary>
     /// Rebuilds a ticket from persisted state. Intended for repositories only.
     /// </summary>
     public static Ticket Rehydrate(

@@ -118,6 +118,52 @@ public sealed class Booking : Entity
     }
 
     /// <summary>
+    /// True when the booking is still unpaid and its seat hold has run out at <paramref name="nowUtc"/>.
+    /// Such a booking must be expired before its seats can be sold again.
+    /// </summary>
+    public bool IsSeatHoldOverdue(DateTime nowUtc) =>
+        Status == BookingStatus.Pending && ExpiresAt <= nowUtc;
+
+    /// <summary>
+    /// Marks an unpaid booking whose seat hold has run out as expired and puts its seats back on sale.
+    /// </summary>
+    public Result Expire(DateTime nowUtc)
+    {
+        if (Status != BookingStatus.Pending)
+            return BookingErrors.NotPending;
+
+        if (!IsSeatHoldOverdue(nowUtc))
+            return BookingErrors.SeatHoldNotOver;
+
+        Status = BookingStatus.Expired;
+        ReleaseHeldTickets();
+        return Result.Success();
+    }
+
+    /// <summary>
+    /// Cancels an unpaid booking at the customer's request before its seat hold runs out.
+    /// Its seats go back on sale; nothing was paid, so nothing is refunded.
+    /// </summary>
+    public Result CancelUnpaid(DateTime nowUtc)
+    {
+        if (IsSeatHoldOverdue(nowUtc) || Status == BookingStatus.Expired)
+            return BookingErrors.Expired;
+
+        if (Status != BookingStatus.Pending)
+            return BookingErrors.NotPending;
+
+        Status = BookingStatus.Cancelled;
+        ReleaseHeldTickets();
+        return Result.Success();
+    }
+
+    private void ReleaseHeldTickets()
+    {
+        foreach (var ticket in _tickets)
+            ticket.ReleaseHold();
+    }
+
+    /// <summary>
     /// Rebuilds an existing booking from persisted state. Intended for repositories only.
     /// </summary>
     public static Booking Rehydrate(

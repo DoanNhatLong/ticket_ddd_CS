@@ -24,6 +24,18 @@ public static class BookingErrors
         "Booking.NotFound",
         "No booking with that code exists for this customer.");
 
+    public static readonly Error NotPending = Error.Conflict(
+        "Booking.NotPending",
+        "Only an unpaid booking whose seat hold is still running can be changed this way.");
+
+    public static readonly Error Expired = Error.Conflict(
+        "Booking.Expired",
+        "The booking's seat hold has run out; the booking is expired and its seats are back on sale.");
+
+    public static readonly Error SeatHoldNotOver = Error.Conflict(
+        "Booking.SeatHoldNotOver",
+        "The booking's seat hold has not run out yet.");
+
     public static Error DuplicateSeat(int trainTripId, int seatId) => Error.Validation(
         "Booking.DuplicateSeat",
         $"Seat {seatId} on train trip {trainTripId} is chosen more than once.");
