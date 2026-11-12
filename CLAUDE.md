@@ -44,10 +44,22 @@
 - `TrainBooking.Api/`: FastEndpoints endpoints, HTTP error mapping, composition root (`Program.cs`).
 - `TrainBooking.Api.Tests/`: HTTP-level integration tests against the MySQL test database.
 - `web/`: React + Vite + TypeScript frontend. Its own rules are in `web/CLAUDE.md`.
+- `mock/`: mock work (contents to be defined).
 - `monitoring/`: Prometheus config, Grafana provisioning, MySQL exporter user script.
 - `docs/`: ADRs, agent docs, Postman collection. `.scratch/`: specs and tickets.
 - `init.sql`: MySQL schema and seed data.
 - The rules in this file about .NET, DDD and `dotnet build` apply to the backend projects only.
+
+## Task scope (what to read)
+Do not scan the whole repository for every task. Read only what the task's area needs:
+- **Backend task** (API, domain, use cases, database): read only the backend files the task touches
+  (`TrainBooking.*` projects, `init.sql`, and `GLOSSARY.md`/`docs/adr/`/`.scratch/` when the task refers to them).
+  Do not open `web/` or `mock/`.
+- **Frontend task**: work only inside `web/` (follow `web/CLAUDE.md`). Do not open backend code;
+  if the UI needs an API change, say so instead of reading or changing the backend.
+- **Mock task**: work only inside `mock/`.
+- Look outside the task's area only when the user asks, or when the task genuinely cannot be done
+  without it; then say what you read and why.
 
 ## Agent skills
 
