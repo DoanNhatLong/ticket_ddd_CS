@@ -84,8 +84,28 @@ services:
       redis:
         condition: service_healthy
     restart: always
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    container_name: train_elasticsearch
+    # Development only: single node, security disabled (no user/password, plain HTTP).
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -qv '\"status\":\"red\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: always
 volumes:
   mysql_data:
   prometheus_data:
   grafana_data:
   redis_data:
+  es_data:
