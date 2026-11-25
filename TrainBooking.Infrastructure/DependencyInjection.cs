@@ -1,3 +1,4 @@
+using Elastic.Clients.Elasticsearch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,13 +11,14 @@ using TrainBooking.Infrastructure.Repositories.BookingRepository;
 using TrainBooking.Infrastructure.Repositories.SeatRepository;
 using TrainBooking.Infrastructure.Repositories.TrainTripRepository;
 using TrainBooking.Infrastructure.Repositories.UserRepository;
+using TrainBooking.Infrastructure.Search;
 
 namespace TrainBooking.Infrastructure;
 
 public static class DependencyInjection
 {
     /// <summary>
-    /// Registers infrastructure services: MySQL DbContext, repositories and Redis cache.
+    /// Registers infrastructure services: MySQL DbContext, repositories, Redis cache and Elasticsearch client.
     /// </summary>
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
@@ -24,6 +26,7 @@ public static class DependencyInjection
     {
         AddPersistence(services, configuration);
         AddCaching(services, configuration);
+        AddSearch(services, configuration);
 
         return services;
     }
@@ -66,5 +69,28 @@ public static class DependencyInjection
             options.Configuration = configuration.GetConnectionString("Redis");
             options.InstanceName = "TrainBooking:";
         });
+    }
+
+    private static void AddSearch(IServiceCollection services, IConfiguration configuration)
+    {
+        var urlText = configuration["Elasticsearch:Url"];
+        if (!Uri.TryCreate(urlText, UriKind.Absolute, out var url))
+        {
+            throw new InvalidOperationException(
+                "'Elasticsearch:Url' is not configured or is not a valid URL (e.g. \"http://localhost:9200\").");
+        }
+
+        var trainTripIndex = configuration["Elasticsearch:TrainTripIndex"];
+        if (string.IsNullOrWhiteSpace(trainTripIndex))
+        {
+            throw new InvalidOperationException(
+                "'Elasticsearch:TrainTripIndex' is not configured (e.g. \"train-trips\").");
+        }
+
+        services.AddSingleton(new ElasticsearchOptions(url, trainTripIndex));
+
+        // The client is thread-safe and manages its own connections: one instance for the whole app.
+        // Creating it does not connect, so the API still starts when Elasticsearch is down.
+        services.AddSingleton(new ElasticsearchClient(new ElasticsearchClientSettings(url)));
     }
 }
