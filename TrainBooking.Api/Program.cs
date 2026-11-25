@@ -18,6 +18,9 @@ builder.Services.AddFastEndpoints();
 // Releases the seats of unpaid bookings whose seat hold has run out.
 builder.Services.AddHostedService<BookingExpiryService>();
 
+// Copies searchable data from MySQL to Elasticsearch when the API starts.
+builder.Services.AddHostedService<SearchIndexInitializer>();
+
 // Unhandled exceptions become a 500 problem response instead of an empty body.
 builder.Services.AddExceptionHandler<UnhandledExceptionHandler>();
 builder.Services.AddProblemDetails();

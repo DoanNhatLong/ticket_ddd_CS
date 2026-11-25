@@ -78,6 +78,61 @@
       ]
     },
     {
+      "name": "Stations",
+      "item": [
+        {
+          "name": "Suggest stations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/stations/suggest?q=da n&max=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "stations",
+                "suggest"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "da n"
+                },
+                {
+                  "key": "max",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Stations for the text typed so far; tolerates missing accents and small typos (try \"sai gom\", \"hie\"). Empty list when nothing matches, 503 Search.Unavailable when Elasticsearch is down or the index is not built."
+          }
+        },
+        {
+          "name": "Rebuild station index",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/search/stations/rebuild",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "search",
+                "stations",
+                "rebuild"
+              ]
+            },
+            "description": "Copies the stations from MySQL to Elasticsearch again."
+          }
+        }
+      ]
+    },
+    {
       "name": "Bookings",
       "item": [
         {
