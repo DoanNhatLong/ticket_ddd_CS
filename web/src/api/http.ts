@@ -25,6 +25,8 @@ interface RequestOptions {
   body?: unknown
   /** Sent as X-Customer-Id until real authentication exists. */
   customerId?: number
+  /** Cancels the request, e.g. when a newer one replaces it. */
+  signal?: AbortSignal
 }
 
 export async function apiFetch<T>(path: string, options: RequestOptions = {}): Promise<T> {
@@ -36,6 +38,7 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
     method: options.method ?? 'GET',
     headers,
     body: options.body === undefined ? undefined : JSON.stringify(options.body),
+    signal: options.signal,
   })
 
   if (!response.ok) {

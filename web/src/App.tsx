@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { createBooking, type BookingDetail } from './api/bookings'
 import { ApiError } from './api/http'
+import type { StationSuggestion } from './api/stations'
 import type { TripSeat } from './api/trainTrips'
 import { selectionKey, toSelectedSeat, type SelectedSeat } from './booking/selection'
 import { BookingConfirmation } from './components/BookingConfirmation'
@@ -8,6 +9,7 @@ import { BookingPanel } from './components/BookingPanel'
 import { CustomerPicker } from './components/CustomerPicker'
 import { SeatLegend } from './components/SeatLegend'
 import { SeatMap } from './components/SeatMap'
+import { StationSearch } from './components/StationSearch'
 import { TopBar } from './components/TopBar'
 import { TripSummary } from './components/TripSummary'
 import { TripTabs } from './components/TripTabs'
@@ -17,11 +19,14 @@ import './App.css'
 const TRIP_IDS = [1, 2, 3, 4, 5]
 // Seed customers (init.sql): users 1-3 have the Customer role.
 const CUSTOMER_IDS = [1, 2, 3]
+// Sample searches: missing accents, unfinished words and typos.
+const STATION_EXAMPLES = ['da n', 'ha noi', 'sai gom', 'hie', 'nha trsng', 'xyz']
 
 function App() {
   const [customerId, setCustomerId] = useState(CUSTOMER_IDS[0])
   const [tripId, setTripId] = useState(TRIP_IDS[0])
   const { trip, loading, error, reload } = useTripSeats(tripId)
+  const [station, setStation] = useState<StationSuggestion | null>(null)
 
   // Picked seats keyed by "tripId:seatId", in the order they were picked.
   const [selection, setSelection] = useState<Map<string, SelectedSeat>>(new Map())
@@ -110,6 +115,13 @@ function App() {
       </TopBar>
 
       <main className="content">
+        <StationSearch
+          label="Find a station"
+          selected={station}
+          onSelect={setStation}
+          examples={STATION_EXAMPLES}
+        />
+
         <TripTabs tripIds={TRIP_IDS} activeId={tripId} onChange={setTripId} />
 
         {confirmed && <BookingConfirmation booking={confirmed} onClose={() => setConfirmed(null)} />}
