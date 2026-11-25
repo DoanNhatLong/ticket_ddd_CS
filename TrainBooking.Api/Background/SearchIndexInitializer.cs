@@ -1,5 +1,7 @@
 using MediatR;
 using TrainBooking.Application.Stations.Commands.RebuildStationIndex;
+using TrainBooking.Application.TrainTrips.Commands.RebuildTrainTripIndex;
+using TrainBooking.Domain.Abstractions;
 
 namespace TrainBooking.Api.Background;
 
@@ -37,12 +39,8 @@ public sealed class SearchIndexInitializer : BackgroundService
             await using var scope = _scopeFactory.CreateAsyncScope();
             var sender = scope.ServiceProvider.GetRequiredService<ISender>();
 
-            var result = await sender.Send(new RebuildStationIndexCommand(), stoppingToken);
-
-            if (result.IsSuccess)
-                _logger.LogInformation("Indexed {Count} stations.", result.Value);
-            else
-                _logger.LogWarning("Station index was not built: {Code}.", result.Error.Code);
+            Report("stations", await sender.Send(new RebuildStationIndexCommand(), stoppingToken));
+            Report("train trips", await sender.Send(new RebuildTrainTripIndexCommand(), stoppingToken));
         }
         catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
         {
@@ -53,5 +51,13 @@ public sealed class SearchIndexInitializer : BackgroundService
             // For example the database is down; the API must still start.
             _logger.LogError(exception, "Building the search indices failed.");
         }
+    }
+
+    private void Report(string what, Result<int> result)
+    {
+        if (result.IsSuccess)
+            _logger.LogInformation("Indexed {Count} {What:l}.", result.Value, what);
+        else
+            _logger.LogWarning("The index of {What:l} was not built: {Code}.", what, result.Error.Code);
     }
 }

@@ -74,6 +74,72 @@
             },
             "description": "Every seat of the train trip with carriage, seat class, fare (null when not sold) and isFree.\n\nSeed train trip 1: A01, A03 (1,200,000), A02 (no fare), B01-B04 (750,000). A01, B01, B02 are held by seed bookings until 2026-11-03."
           }
+        },
+        {
+          "name": "Search train trips",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/train-trips/search?q=sai gom da nag&from=SGN&to=DAD&date=2027-01-10&page=1&pageSize=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "train-trips",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "sai gom da nag"
+                },
+                {
+                  "key": "from",
+                  "value": "SGN"
+                },
+                {
+                  "key": "to",
+                  "value": "DAD"
+                },
+                {
+                  "key": "date",
+                  "value": "2027-01-10"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "All parameters are optional; untick some in Params. Only train trips that have not departed. 400 for a bad date or page, 503 Search.Unavailable when Elasticsearch is down or the index is not built."
+          }
+        },
+        {
+          "name": "Rebuild train trip index",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/search/train-trips/rebuild",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "search",
+                "train-trips",
+                "rebuild"
+              ]
+            },
+            "description": "Copies the train trips from MySQL to Elasticsearch again."
+          }
         }
       ]
     },

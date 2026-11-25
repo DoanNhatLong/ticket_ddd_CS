@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TrainBooking.Application.Stations;
+using TrainBooking.Application.TrainTrips.Search;
 using TrainBooking.Domain.Bookings;
 using TrainBooking.Domain.TrainTrips;
 using TrainBooking.Domain.Trains;
@@ -102,6 +103,8 @@ public static class DependencyInjection
         services.AddSingleton(new ElasticsearchClient(
             new ElasticsearchClientSettings(url).RequestTimeout(TimeSpan.FromSeconds(5))));
 
+        services.AddSingleton<SearchIndexBuilder>();
         services.AddScoped<IStationSuggester, ElasticsearchStationSuggester>();
+        services.AddScoped<ITrainTripSearch, ElasticsearchTrainTripSearch>();
     }
 }
