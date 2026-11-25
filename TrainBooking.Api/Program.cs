@@ -4,10 +4,13 @@ using OpenTelemetry.Resources;
 using Polly;
 using TrainBooking.Api.Background;
 using TrainBooking.Api.Http;
+using TrainBooking.Api.Logging;
 using TrainBooking.Application;
 using TrainBooking.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddAppLogging();
 
 builder.Services
     .AddApplication()
@@ -54,6 +57,9 @@ builder.Services.AddResiliencePipeline("BookingPipeline", pipelineBuilder =>
 });
 
 var app = builder.Build();
+
+// Outside the exception handler, so a failed request is logged with its final status code.
+app.UseAppRequestLogging();
 
 app.UseExceptionHandler();
 
