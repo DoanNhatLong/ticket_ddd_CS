@@ -2,6 +2,7 @@ using Elastic.Clients.Elasticsearch;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TrainBooking.Application.Stations;
 using TrainBooking.Domain.Bookings;
 using TrainBooking.Domain.TrainTrips;
 using TrainBooking.Domain.Trains;
@@ -87,10 +88,20 @@ public static class DependencyInjection
                 "'Elasticsearch:TrainTripIndex' is not configured (e.g. \"train-trips\").");
         }
 
-        services.AddSingleton(new ElasticsearchOptions(url, trainTripIndex));
+        var stationIndex = configuration["Elasticsearch:StationIndex"];
+        if (string.IsNullOrWhiteSpace(stationIndex))
+        {
+            throw new InvalidOperationException(
+                "'Elasticsearch:StationIndex' is not configured (e.g. \"stations\").");
+        }
+
+        services.AddSingleton(new ElasticsearchOptions(url, trainTripIndex, stationIndex));
 
         // The client is thread-safe and manages its own connections: one instance for the whole app.
         // Creating it does not connect, so the API still starts when Elasticsearch is down.
-        services.AddSingleton(new ElasticsearchClient(new ElasticsearchClientSettings(url)));
+        services.AddSingleton(new ElasticsearchClient(
+            new ElasticsearchClientSettings(url).RequestTimeout(TimeSpan.FromSeconds(5))));
+
+        services.AddScoped<IStationSuggester, ElasticsearchStationSuggester>();
     }
 }

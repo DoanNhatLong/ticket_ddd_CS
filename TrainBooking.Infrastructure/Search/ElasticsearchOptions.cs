@@ -5,4 +5,5 @@ namespace TrainBooking.Infrastructure.Search;
 /// </summary>
 /// <param name="Url">Address of the Elasticsearch server.</param>
 /// <param name="TrainTripIndex">Name (alias) under which train trips are searched.</param>
-internal sealed record ElasticsearchOptions(Uri Url, string TrainTripIndex);
+/// <param name="StationIndex">Name (alias) under which station suggestions are searched.</param>
+internal sealed record ElasticsearchOptions(Uri Url, string TrainTripIndex, string StationIndex);

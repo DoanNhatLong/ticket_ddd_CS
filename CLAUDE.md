@@ -3,7 +3,14 @@
 ## Locked files / busy ports
 - If a build or run fails because a file is locked by another process (e.g. MSB3021/MSB3027 on `TrainBooking.Api.exe`) or a port is already in use (e.g. 7777), STOP immediately and notify the user.
 - Do NOT work around it: no building to a temporary/scratch output directory, no running a parallel copy on another port, and no killing the user's processes.
-- Wait for the user to free the file/port before retrying.
+- This covers EVERY port (API 7777, web 5173, MySQL 3306, Redis 6380, Elasticsearch 9200, Grafana 3000,
+  Prometheus 9090, ...) and every situation, including a verification or throwaway script:
+  - the port is held by a process other than the expected one (e.g. a native `mysqld.exe` on 3306
+    instead of the `train_mysql` container), or
+  - a container is running but its host port is not published.
+- As soon as this is suspected, stop the WHOLE task: no further commands, no switching to another
+  database/host/port, no in-memory or fake replacement to keep going. Report what was seen and ask.
+- Wait for the user to free the file/port, or to say how to proceed, before retrying.
 
 ## Architecture (intentional, do not change)
 - This project uses DDD with three layers: Domain, Application, Infrastructure.
