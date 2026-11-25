@@ -125,7 +125,44 @@ services:
         condition: service_healthy
     # unless-stopped: stays off after "docker compose stop kibana", even when Docker restarts.
     restart: unless-stopped
+  elasticsearch-setup:
+    # Runs once and exits: registers the fields and the 7-day retention of the log data stream.
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    container_name: train_elasticsearch_setup
+    entrypoint: ["curl", "-sS", "-f", "-X", "PUT"]
+    command:
+      - "http://elasticsearch:9200/_index_template/logs-trainbooking"
+      - "-H"
+      - "Content-Type: application/json"
+      - "--data-binary"
+      - "@/setup/trainbooking-logs-template.json"
+    volumes:
+      - ./monitoring/elasticsearch:/setup:ro
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: "no"
+  logstash:
+    # Must be the same version as Elasticsearch. No host port: it only reads ./logs.
+    image: docker.elastic.co/logstash/logstash:8.15.3
+    container_name: train_logstash
+    environment:
+      - LS_JAVA_OPTS=-Xms256m -Xmx256m
+      - PIPELINE_WORKERS=1
+      - PIPELINE_ECS_COMPATIBILITY=disabled
+      - XPACK_MONITORING_ENABLED=false
+    volumes:
+      - ./monitoring/logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./logs:/logs:ro
+      - logstash_data:/usr/share/logstash/data
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      elasticsearch-setup:
+        condition: service_completed_successfully
+    restart: unless-stopped
 volumes:
+  logstash_data:
   mysql_data:
   prometheus_data:
   grafana_data:

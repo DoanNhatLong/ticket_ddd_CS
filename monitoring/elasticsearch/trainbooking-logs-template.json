@@ -1,0 +1,32 @@
+{
+  "index_patterns": ["logs-trainbooking-*"],
+  "data_stream": {},
+  "priority": 500,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "lifecycle": {
+      "data_retention": "7d"
+    },
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "@timestamp": { "type": "date" },
+        "message": { "type": "text" },
+        "level": { "type": "keyword" },
+        "exception": { "type": "text" },
+        "traceId": { "type": "keyword" },
+        "source": { "type": "keyword" },
+        "application": { "type": "keyword" },
+        "requestMethod": { "type": "keyword" },
+        "requestPath": { "type": "keyword" },
+        "requestId": { "type": "keyword" },
+        "statusCode": { "type": "integer" },
+        "elapsedMs": { "type": "float" },
+        "tags": { "type": "keyword" }
+      }
+    }
+  }
+}
