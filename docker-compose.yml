@@ -103,6 +103,28 @@ services:
       retries: 12
       start_period: 30s
     restart: always
+  kibana:
+    # Must be the same version as Elasticsearch.
+    image: docker.elastic.co/kibana/kibana:8.15.3
+    container_name: train_kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - TELEMETRY_OPTIN=false
+      - NODE_OPTIONS=--max-old-space-size=1024
+    ports:
+      # This machine only: Kibana has no login while Elasticsearch security is disabled.
+      - "127.0.0.1:5601:5601"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -f -o /dev/null http://localhost:5601/api/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 60s
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    # unless-stopped: stays off after "docker compose stop kibana", even when Docker restarts.
+    restart: unless-stopped
 volumes:
   mysql_data:
   prometheus_data:
