@@ -12,7 +12,7 @@ A train ticket booking system built for learning:
   FastEndpoints, EF Core with Pomelo (MySQL). Runs on `http://localhost:7777`.
 - **Frontend:** `web/` (Vite + React + TypeScript), `http://localhost:5173`, proxies `/api` to the API.
 - **Infrastructure (Docker Compose):** MySQL, Redis, Prometheus, Grafana, mysqld/redis exporters,
-  and the ELK stack (Elasticsearch, Logstash, Kibana).
+  the ELK stack (Elasticsearch, Logstash, Kibana) and nginx.
 - The customer is identified by the `X-Customer-Id` header (seed users 1–3 are customers, 4 staff,
   5 admin). There is no real authentication yet.
 
@@ -34,6 +34,7 @@ cd web; npm run dev                         # http://localhost:5173
 | Elasticsearch | http://localhost:9200 | Single node, security disabled (dev only) |
 | Kibana | http://localhost:5601 | Dashboard "TrainBooking logs" |
 | Grafana / Prometheus | :3000 / :9090 | API, MySQL and Redis metrics |
+| Nginx | http://localhost:8080 | Installed only (default page); no proxy rules yet. Config goes in `monitoring/nginx/conf.d/` |
 
 Things that have bitten us:
 
