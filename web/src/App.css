@@ -719,11 +719,6 @@
 /* ---------- Station search ---------- */
 
 .station-search {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  padding: 20px 24px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -823,4 +818,138 @@
 
 .example-chip:hover {
   border-color: var(--brand);
+}
+
+/* ---------- Train trip search ---------- */
+
+.trip-search {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.trip-search-title {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.trip-search-stations,
+.trip-search-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.trip-search .field input {
+  padding: 10px 12px;
+  color-scheme: light dark;
+}
+
+.trip-search-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.trip-search-hint {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.trip-results {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trip-results-count {
+  margin: 0;
+  color: var(--muted);
+}
+
+.trip-results-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.trip-result {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.trip-result.selected {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 1px var(--brand);
+}
+
+.trip-result-train,
+.trip-result-route > div,
+.trip-result-side {
+  display: flex;
+  flex-direction: column;
+}
+
+.trip-result small {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.trip-result-route {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.trip-result-route strong {
+  font-size: 1.2rem;
+}
+
+.trip-result-duration {
+  color: var(--muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.trip-result-side {
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.trip-result-fare {
+  font-weight: 600;
+}
+
+.trip-results-pages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+@media (max-width: 720px) {
+  .trip-search-stations,
+  .trip-search-row,
+  .trip-result {
+    grid-template-columns: 1fr;
+  }
+
+  .trip-result-side {
+    align-items: flex-start;
+  }
 }

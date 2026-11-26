@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { createBooking, type BookingDetail } from './api/bookings'
 import { ApiError } from './api/http'
-import type { StationSuggestion } from './api/stations'
+import type { TrainTripSearchParams } from './api/trainTripSearch'
 import type { TripSeat } from './api/trainTrips'
 import { selectionKey, toSelectedSeat, type SelectedSeat } from './booking/selection'
 import { BookingConfirmation } from './components/BookingConfirmation'
@@ -9,24 +9,25 @@ import { BookingPanel } from './components/BookingPanel'
 import { CustomerPicker } from './components/CustomerPicker'
 import { SeatLegend } from './components/SeatLegend'
 import { SeatMap } from './components/SeatMap'
-import { StationSearch } from './components/StationSearch'
 import { TopBar } from './components/TopBar'
+import { TrainTripResults } from './components/TrainTripResults'
+import { TrainTripSearchForm } from './components/TrainTripSearchForm'
 import { TripSummary } from './components/TripSummary'
 import { TripTabs } from './components/TripTabs'
+import { useTrainTripSearch } from './hooks/useTrainTripSearch'
 import { useTripSeats } from './hooks/useTripSeats'
 import './App.css'
 
 const TRIP_IDS = [1, 2, 3, 4, 5]
 // Seed customers (init.sql): users 1-3 have the Customer role.
 const CUSTOMER_IDS = [1, 2, 3]
-// Sample searches: missing accents, unfinished words and typos.
-const STATION_EXAMPLES = ['da n', 'ha noi', 'sai gom', 'hie', 'nha trsng', 'xyz']
 
 function App() {
   const [customerId, setCustomerId] = useState(CUSTOMER_IDS[0])
   const [tripId, setTripId] = useState(TRIP_IDS[0])
   const { trip, loading, error, reload } = useTripSeats(tripId)
-  const [station, setStation] = useState<StationSuggestion | null>(null)
+  const [searchParams, setSearchParams] = useState<TrainTripSearchParams>({ page: 1 })
+  const search = useTrainTripSearch(searchParams)
 
   // Picked seats keyed by "tripId:seatId", in the order they were picked.
   const [selection, setSelection] = useState<Map<string, SelectedSeat>>(new Map())
@@ -102,6 +103,11 @@ function App() {
     }
   }
 
+  const chooseTrip = (id: number) => {
+    setTripId(id)
+    document.getElementById('seat-map')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   const changeCustomer = (id: number) => {
     setCustomerId(id)
     setConfirmed(null)
@@ -115,11 +121,14 @@ function App() {
       </TopBar>
 
       <main className="content">
-        <StationSearch
-          label="Find a station"
-          selected={station}
-          onSelect={setStation}
-          examples={STATION_EXAMPLES}
+        <TrainTripSearchForm onSearch={setSearchParams} />
+        <TrainTripResults
+          result={search.result}
+          loading={search.loading}
+          error={search.error}
+          selectedTripId={tripId}
+          onSelect={chooseTrip}
+          onPageChange={(page) => setSearchParams((current) => ({ ...current, page }))}
         />
 
         <TripTabs tripIds={TRIP_IDS} activeId={tripId} onChange={setTripId} />
@@ -127,7 +136,7 @@ function App() {
         {confirmed && <BookingConfirmation booking={confirmed} onClose={() => setConfirmed(null)} />}
 
         <div className="booking-layout">
-          <div className="booking-main">
+          <div className="booking-main" id="seat-map">
             {error && <div className="alert">{error}</div>}
             {loading && !trip && <div className="placeholder">Loading seats…</div>}
 
