@@ -54,6 +54,8 @@
 - `mock/`: mock work (contents to be defined).
 - `monitoring/`: Prometheus config, Grafana provisioning, MySQL exporter user script.
 - `docs/`: ADRs, agent docs, Postman collection. `.scratch/`: specs and tickets.
+- `docs/project-status.md`: current state of the project (what is done, how to run it, known issues,
+  next steps). Read it at the start of a new session; update it after finishing a larger piece of work.
 - `init.sql`: MySQL schema and seed data.
 - The rules in this file about .NET, DDD and `dotnet build` apply to the backend projects only.
 
