@@ -19,10 +19,16 @@ public static class LoggingSetup
     {
         builder.Host.UseSerilog((context, configuration) =>
         {
+            // Tells apart the API copies that run behind the load balancer (setting: Instance:Name).
+            var instanceName = context.Configuration["Instance:Name"];
+            if (string.IsNullOrWhiteSpace(instanceName))
+                instanceName = Environment.MachineName;
+
             configuration
                 .ReadFrom.Configuration(context.Configuration)
                 .Enrich.FromLogContext()
                 .Enrich.WithProperty("Application", "TrainBooking.Api")
+                .Enrich.WithProperty("Instance", instanceName)
                 .WriteTo.Console();
 
             AddFile(configuration, context.Configuration, context.HostingEnvironment.ContentRootPath);

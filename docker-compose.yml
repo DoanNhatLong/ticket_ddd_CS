@@ -162,12 +162,13 @@ services:
         condition: service_completed_successfully
     restart: unless-stopped
   nginx:
-    # Reverse proxy entry point. For now it only serves the default nginx page;
-    # site configuration will go into ./monitoring/nginx/conf.d later.
+    # Reverse proxy entry point: spreads /api/ over two API copies on the host (7777, 7778).
     image: nginx:1.27-alpine
     container_name: train_nginx
     ports:
       - "8080:80"
+    volumes:
+      - ./monitoring/nginx/conf.d:/etc/nginx/conf.d:ro
     extra_hosts:
       # Lets nginx reach the API that runs on the host (http://host.docker.internal:7777).
       - "host.docker.internal:host-gateway"

@@ -19,6 +19,19 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+    "http-2": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:7778",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Instance__Name": "api-2",
+        "FileLogging__Path": "../logs/trainbooking-api2-.json",
+        "Elasticsearch__RebuildOnStartup": "false",
+        "BookingExpiry__IntervalSeconds": "0"
+      }
+    },
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,

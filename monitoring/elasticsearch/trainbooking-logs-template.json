@@ -20,6 +20,7 @@
         "traceId": { "type": "keyword" },
         "source": { "type": "keyword" },
         "application": { "type": "keyword" },
+        "instance": { "type": "keyword" },
         "requestMethod": { "type": "keyword" },
         "requestPath": { "type": "keyword" },
         "requestId": { "type": "keyword" },
