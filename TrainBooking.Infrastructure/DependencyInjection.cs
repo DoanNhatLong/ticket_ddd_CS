@@ -1,7 +1,9 @@
 using Elastic.Clients.Elasticsearch;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using TrainBooking.Application.Stations;
 using TrainBooking.Application.TrainTrips.Search;
 using TrainBooking.Domain.Bookings;
@@ -60,7 +62,12 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IBookingRepository, BookingRepository>();
         services.AddScoped<ITrainTripRepository, TrainTripRepository>();
-        services.AddScoped<ISeatRepository, SeatRepository>();
+        // The seat layout of a train is served from Redis; CachedSeatRepository decorates the EF Core one.
+        services.AddScoped<SeatRepository>();
+        services.AddScoped<ISeatRepository>(sp => new CachedSeatRepository(
+            sp.GetRequiredService<SeatRepository>(),
+            sp.GetRequiredService<IDistributedCache>(),
+            sp.GetRequiredService<ILogger<CachedSeatRepository>>()));
     }
 
     private static void AddCaching(IServiceCollection services, IConfiguration configuration)
