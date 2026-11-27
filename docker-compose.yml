@@ -169,9 +169,8 @@ services:
       - "8080:80"
     volumes:
       - ./monitoring/nginx/conf.d:/etc/nginx/conf.d:ro
-    extra_hosts:
-      # Lets nginx reach the API that runs on the host (http://host.docker.internal:7777).
-      - "host.docker.internal:host-gateway"
+    # The API copies on the host are reached as host.docker.internal, resolved by nginx
+    # itself through Docker's DNS with IPv6 off (see monitoring/nginx/conf.d/default.conf).
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
       interval: 10s

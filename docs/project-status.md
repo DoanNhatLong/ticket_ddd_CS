@@ -22,6 +22,8 @@ A train ticket booking system built for learning:
 cd "D:\0 CS\project_ticket"
 docker compose up -d                        # everything; or only: mysql-db redis elasticsearch
 dotnet run --project TrainBooking.Api       # wait for "Indexed 5 stations." / "Indexed 5 train trips."
+# optional second API copy behind nginx (another terminal; --no-build because copy 1 locks the exe):
+dotnet run --project TrainBooking.Api --no-build --launch-profile http-2
 cd web; npm run dev                         # http://localhost:5173
 ```
 
@@ -34,7 +36,8 @@ cd web; npm run dev                         # http://localhost:5173
 | Elasticsearch | http://localhost:9200 | Single node, security disabled (dev only) |
 | Kibana | http://localhost:5601 | Dashboard "TrainBooking logs" |
 | Grafana / Prometheus | :3000 / :9090 | API, MySQL and Redis metrics |
-| Nginx | http://localhost:8080 | Installed only (default page); no proxy rules yet. Config goes in `monitoring/nginx/conf.d/` |
+| API copy 2 | http://localhost:7778 | Profile `http-2`; see "Two API copies behind nginx" |
+| Nginx | http://localhost:8080 | `/api/` is spread over 7777 and 7778; `/` is still the default nginx page |
 
 Things that have bitten us:
 
@@ -43,12 +46,37 @@ Things that have bitten us:
   `0.0.0.0:3306->3306/tcp`, check that first.
 - Port 7777 is inside a Windows-reserved range on this machine; it was excluded manually with
   `netsh int ipv4 add excludedportrange`.
-- Stop the API before `dotnet build` (the running exe is locked), and before stopping Docker
+- Stop the API (both copies) before `dotnet build` (the running exe is locked), and before stopping Docker
   (otherwise the booking expiry job logs a connection error every 30 s).
 - `init.sql` rebuilds the whole schema and seed. To apply it to the dev database:
   `docker cp init.sql train_mysql:/tmp/init.sql` then
   `docker exec train_mysql sh -c 'mysql --default-character-set=utf8mb4 -uroot -p"$MYSQL_ROOT_PASSWORD" < /tmp/init.sql'`.
   Seed train trips run 2027-01-10 to 2027-01-14.
+
+## Two API copies behind nginx
+
+Simulates two servers on one machine. Config: `monitoring/nginx/conf.d/default.conf`.
+
+```
+client -> nginx :8080 -> /api/ -> upstream trainbooking_api
+                                   |-- host.docker.internal:7777  api-1 (profile "http")
+                                   `-- host.docker.internal:7778  api-2 (profile "http-2")
+```
+
+- Round-robin. A copy that refuses a connection is skipped for 10 s (`max_fails=1 fail_timeout=10s`)
+  and the request goes to the other copy. nginx only retries a POST if it never reached the API.
+- Every response through nginx has an `X-Upstream` header naming the copy that answered.
+- api-2 (`launchSettings.json`, profile `http-2`): `Instance:Name=api-2`, logs to
+  `logs/trainbooking-api2-*.json`, Elasticsearch rebuild on startup off, booking expiry job off.
+  So only api-1 runs the background work.
+- Every log line has an `Instance` property (`instance` in Kibana); Prometheus scrapes both copies
+  with the label `instance_name`.
+- Gotcha: inside the nginx container `host.docker.internal` also resolves to an IPv6 address that
+  cannot be reached. nginx therefore resolves the name itself (`resolver 127.0.0.11 ipv6=off` plus
+  `resolve` on each server); with a plain `server host.docker.internal:7777;` it would see 4 servers.
+- The `instance` field was added to the log index template; the live data stream got it with
+  `PUT logs-trainbooking-default/_mapping`. If the Elasticsearch volume is recreated, the template
+  (installed by `elasticsearch-setup`) already has it.
 
 ## Business: booking lifecycle
 
