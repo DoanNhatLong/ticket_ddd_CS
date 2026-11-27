@@ -16,6 +16,10 @@ public static class BookingErrors
         "Booking.PassengerIdNumberRequired",
         "Every ticket needs the passenger's identity document number.");
 
+    public static readonly Error ExpectedPriceRequired = Error.Validation(
+        "Booking.ExpectedPriceRequired",
+        "Every ticket needs the price the customer was shown (expectedPrice).");
+
     public static readonly Error SeatTaken = Error.Conflict(
         "Booking.SeatTaken",
         "At least one of the chosen seats is already taken on that train trip.");
@@ -59,4 +63,10 @@ public static class BookingErrors
     public static Error NoFare(int trainTripId, int seatId) => Error.Validation(
         "Booking.NoFare",
         $"Seat {seatId} is not sold on train trip {trainTripId}: its seat class has no fare.");
+
+    public static Error PriceChanged(int trainTripId, int seatId, decimal expectedPrice, decimal currentPrice) =>
+        Error.Conflict(
+            "Booking.PriceChanged",
+            $"The price of seat {seatId} on train trip {trainTripId} has changed from {expectedPrice} to {currentPrice}. " +
+            "Reload the seats and confirm the new price.");
 }

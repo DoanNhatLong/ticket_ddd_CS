@@ -233,7 +233,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"tickets\": [\n    {\n      \"trainTripId\": 1,\n      \"seatId\": 8,\n      \"passengerName\": \"Nguyen Van A\",\n      \"passengerIdNumber\": \"001099012345\"\n    }\n  ]\n}",
+              "raw": "{\n  \"tickets\": [\n    {\n      \"trainTripId\": 1,\n      \"seatId\": 8,\n      \"passengerName\": \"Nguyen Van A\",\n      \"passengerIdNumber\": \"001099012345\",\n      \"expectedPrice\": 750000.00\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"

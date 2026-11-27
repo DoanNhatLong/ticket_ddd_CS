@@ -10,8 +10,13 @@ namespace TrainBooking.Application.Bookings.Commands.CreateBooking;
 public sealed record CreateBookingCommand(int? CustomerId, IReadOnlyList<CreateBookingTicket> Tickets)
     : IRequest<Result<BookingDetailResponse>>, ICustomerRequest;
 
+/// <param name="ExpectedPrice">
+/// The ticket price the customer was shown. Required: the booking is refused with
+/// <c>Booking.PriceChanged</c> when the current fare differs.
+/// </param>
 public sealed record CreateBookingTicket(
     int TrainTripId,
     int SeatId,
     string? PassengerName,
-    string? PassengerIdNumber);
+    string? PassengerIdNumber,
+    decimal? ExpectedPrice);

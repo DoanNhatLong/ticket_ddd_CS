@@ -55,7 +55,8 @@ public sealed class CreateBookingCommandHandler
                 trainTrips[t.TrainTripId],
                 seats[t.SeatId],
                 t.PassengerName ?? string.Empty,
-                t.PassengerIdNumber ?? string.Empty))
+                t.PassengerIdNumber ?? string.Empty,
+                t.ExpectedPrice))
             .ToList();
 
         var nowUtc = _clock.GetUtcNow().UtcDateTime;

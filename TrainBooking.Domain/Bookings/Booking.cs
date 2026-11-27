@@ -60,7 +60,8 @@ public sealed class Booking : Entity
 
     /// <summary>
     /// Creates a pending booking that holds the requested seats for <see cref="SeatHoldDuration"/>.
-    /// Each ticket price is fixed at the train trip's current fare for the seat's seat class.
+    /// Each ticket price is fixed at the train trip's current fare for the seat's seat class,
+    /// and only when that fare equals the price the customer expected.
     /// </summary>
     public static Result<Booking> Create(
         int customerId,
@@ -85,6 +86,9 @@ public sealed class Booking : Entity
             if (string.IsNullOrWhiteSpace(request.PassengerIdNumber))
                 return BookingErrors.PassengerIdNumberRequired;
 
+            if (request.ExpectedPrice is null)
+                return BookingErrors.ExpectedPriceRequired;
+
             if (trainTrip.DepartureTime <= nowUtc)
                 return BookingErrors.TrainTripDeparted(trainTrip.Id);
 
@@ -94,6 +98,10 @@ public sealed class Booking : Entity
             var fare = trainTrip.FareFor(seat.SeatClass.Id);
             if (fare is null)
                 return BookingErrors.NoFare(trainTrip.Id, seat.Id);
+
+            // The fare may have changed since the customer saw it: they must confirm the new price.
+            if (fare.Price != request.ExpectedPrice)
+                return BookingErrors.PriceChanged(trainTrip.Id, seat.Id, request.ExpectedPrice.Value, fare.Price);
 
             if (!chosenSeats.Add((trainTrip.Id, seat.Id)))
                 return BookingErrors.DuplicateSeat(trainTrip.Id, seat.Id);
